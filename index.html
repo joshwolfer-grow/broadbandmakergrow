@@ -7,442 +7,254 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-    background: #f0f0f0;
-    color: #1a1a1a;
-    min-height: 100vh;
+    background: #f0f0f0; color: #1a1a1a; min-height: 100vh;
   }
+  .app { display: flex; min-height: 100vh; }
 
-  .app {
-    display: flex;
-    min-height: 100vh;
-  }
-
-  /* ── Form Panel ── */
+  /* ── Form ── */
   .form-panel {
-    width: 480px;
-    min-width: 480px;
-    background: #fff;
-    border-right: 1px solid #ddd;
-    overflow-y: auto;
-    padding: 28px 24px;
+    width: 460px; min-width: 460px; background: #fff;
+    border-right: 1px solid #ddd; overflow-y: auto; padding: 24px 20px;
   }
-
-  .form-panel h1 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .form-panel .subtitle {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 24px;
-  }
-
+  .form-panel h1 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+  .form-panel .subtitle { font-size: 12px; color: #666; margin-bottom: 20px; }
   .section-title {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #888;
-    margin: 24px 0 10px;
-    padding-top: 16px;
-    border-top: 1px solid #eee;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: #888; margin: 20px 0 8px;
+    padding-top: 14px; border-top: 1px solid #eee;
   }
-
   .section-title:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
-
-  .field {
-    margin-bottom: 12px;
-  }
-
-  .field label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 3px;
-    color: #333;
-  }
-
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 2px; color: #333; }
   .field input, .field select, .field textarea {
-    width: 100%;
-    padding: 7px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 13px;
-    font-family: inherit;
+    width: 100%; padding: 6px 8px; border: 1px solid #ccc;
+    border-radius: 3px; font-size: 12px; font-family: inherit;
   }
-
   .field input:focus, .field select:focus, .field textarea:focus {
-    outline: none;
-    border-color: #0066cc;
-    box-shadow: 0 0 0 2px rgba(0,102,204,0.15);
+    outline: none; border-color: #0066cc; box-shadow: 0 0 0 2px rgba(0,102,204,0.15);
   }
-
-  .row {
-    display: flex;
-    gap: 10px;
-  }
-
+  .row { display: flex; gap: 8px; }
   .row .field { flex: 1; }
-
-  .fee-row {
-    display: flex;
-    gap: 8px;
-    align-items: end;
-    margin-bottom: 6px;
-  }
-
+  .fee-row { display: flex; gap: 6px; align-items: end; margin-bottom: 5px; }
   .fee-row .field { flex: 1; margin-bottom: 0; }
-
   .fee-row button {
-    padding: 7px 10px;
-    background: #e74c3c;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    flex-shrink: 0;
-    height: 32px;
+    padding: 6px 8px; background: #e74c3c; color: #fff; border: none;
+    border-radius: 3px; cursor: pointer; font-size: 12px; flex-shrink: 0; height: 28px;
   }
-
   .add-btn {
-    padding: 5px 12px;
-    background: #f5f5f5;
-    border: 1px dashed #bbb;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    color: #555;
-    margin-top: 4px;
+    padding: 4px 10px; background: #f5f5f5; border: 1px dashed #bbb;
+    border-radius: 3px; cursor: pointer; font-size: 11px; color: #555; margin-top: 3px;
   }
-
   .add-btn:hover { background: #eee; }
-
-  .actions {
-    margin-top: 28px;
-    display: flex;
-    gap: 10px;
-  }
-
+  .actions { margin-top: 24px; display: flex; gap: 8px; }
   .btn-primary {
-    padding: 10px 24px;
-    background: #0066cc;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+    padding: 9px 20px; background: #0066cc; color: #fff; border: none;
+    border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer;
   }
-
   .btn-primary:hover { background: #0055aa; }
-
   .btn-secondary {
-    padding: 10px 24px;
-    background: #fff;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
+    padding: 9px 20px; background: #fff; color: #333; border: 1px solid #ccc;
+    border-radius: 5px; font-size: 13px; cursor: pointer;
   }
 
-  /* ── Preview Panel ── */
+  /* ── Preview ── */
   .preview-panel {
-    flex: 1;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 40px 20px;
-    overflow-y: auto;
-    background: #e8e8e8;
+    flex: 1; display: flex; align-items: flex-start; justify-content: center;
+    padding: 32px 20px; overflow-y: auto; background: #e8e8e8;
   }
 
-  /* ── The Label ── */
+  /* ══════════════════════════════════════
+     FCC BROADBAND FACTS LABEL
+     ══════════════════════════════════════ */
   #label {
-    width: 520px;
-    background: #fff;
-    border: 3px solid #000;
-    font-family: Helvetica, Arial, sans-serif;
-    padding: 0;
-    color: #000;
+    width: 480px; background: #fff; border: 3px solid #000;
+    font-family: Helvetica, Arial, sans-serif; color: #000; line-height: 1.3;
   }
 
-  .label-header {
-    background: #000;
-    color: #fff;
-    padding: 10px 14px 8px;
+  .bb-header { background: #000; color: #fff; padding: 12px 14px 10px; }
+  .bb-header h2 { font-size: 30px; font-weight: 900; line-height: 1; letter-spacing: -0.5px; }
+
+  .bb-provider { padding: 8px 14px; border-bottom: 1px solid #000; font-size: 13px; }
+  .bb-provider .pn { font-weight: 700; }
+
+  /* Price block */
+  .bb-price { padding: 8px 14px; border-bottom: 7px solid #000; }
+  .bb-price-main {
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .bb-price-main .lbl { font-weight: 700; font-size: 20px; }
+  .bb-price-main .val { font-weight: 900; font-size: 24px; }
+  .bb-price-main .unit { font-size: 12px; font-weight: 400; }
+  .bb-price-sub { font-size: 10px; color: #333; margin-top: 4px; line-height: 1.4; }
+  .bb-price-intro {
+    margin-top: 6px; padding-top: 6px; border-top: 1px solid #999;
+    font-size: 11px;
   }
 
-  .label-header h2 {
-    font-size: 26px;
-    font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: -0.3px;
+  /* Section headers */
+  .bb-sh { padding: 7px 14px; font-size: 16px; font-weight: 900; border-bottom: 3px solid #000; }
+  .bb-ssh { padding: 5px 14px; font-size: 12px; font-weight: 700; border-bottom: 1px solid #000; }
+
+  /* Line items */
+  .bb-li {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 5px 14px; font-size: 12px; border-bottom: 1px solid #bbb;
   }
+  .bb-li:last-child { border-bottom: none; }
+  .bb-li .l { font-weight: 400; }
+  .bb-li .v { font-weight: 700; text-align: right; white-space: nowrap; }
 
-  .label-provider {
-    padding: 8px 14px;
-    border-bottom: 1px solid #000;
+  /* Speed rows */
+  .bb-sr {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 14px; font-size: 12px; border-bottom: 1px solid #bbb;
   }
+  .bb-sr:last-child { border-bottom: none; }
+  .bb-sr .sl { font-weight: 400; flex: 1; }
+  .bb-sr .sv { font-weight: 900; font-size: 28px; line-height: 1; text-align: right; }
+  .bb-sr .su { font-size: 12px; font-weight: 400; width: 44px; text-align: left; padding-left: 6px; }
 
-  .label-provider .provider-name {
-    font-size: 13px;
-    font-weight: 700;
+  /* Data row */
+  .bb-dr {
+    display: flex; justify-content: flex-end; align-items: baseline;
+    padding: 8px 14px; font-size: 12px; border-bottom: 1px solid #bbb;
   }
+  .bb-dr .dv { font-weight: 900; font-size: 28px; line-height: 1; }
+  .bb-dr .du { font-size: 12px; font-weight: 400; padding-left: 6px; }
 
-  .label-provider .plan-name {
-    font-size: 13px;
-  }
+  /* Links */
+  .bb-lnk { padding: 5px 14px; font-size: 11px; border-bottom: 1px solid #bbb; }
+  .bb-lnk .ll { font-weight: 700; display: block; }
+  .bb-lnk .lu { color: #0055cc; text-decoration: underline; word-break: break-all; font-size: 10px; }
 
-  .label-provider .fcc-id {
-    font-size: 10px;
-    color: #666;
-    margin-top: 2px;
-  }
+  /* Thick divider wrapper */
+  .bb-blk { border-bottom: 7px solid #000; }
 
-  .label-body { padding: 0; }
+  /* Footer */
+  .bb-foot { padding: 8px 14px; font-size: 9.5px; color: #333; line-height: 1.4; }
+  .bb-upi { padding: 3px 14px 6px; font-size: 9px; color: #555; }
 
-  /* Major price row */
-  .price-section {
-    padding: 10px 14px;
-    border-bottom: 8px solid #000;
-  }
-
-  .price-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  .price-main .amount {
-    font-size: 22px;
-    font-weight: 900;
-  }
-
-  .price-note {
-    font-size: 10px;
-    color: #555;
-    margin-top: 2px;
-  }
-
-  /* Intro rate */
-  .intro-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    padding: 4px 0 0;
-  }
-
-  /* Thick / thin dividers */
-  .divider-thick {
-    border-bottom: 8px solid #000;
-  }
-
-  .divider-thin {
-    border-bottom: 1px solid #000;
-  }
-
-  /* Generic line item */
-  .line-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 5px 14px;
-    font-size: 12px;
-    border-bottom: 1px solid #ccc;
-  }
-
-  .line-item:last-child { border-bottom: none; }
-
-  .line-item .li-label { font-weight: 400; }
-  .line-item .li-value { font-weight: 700; text-align: right; }
-
-  .line-item.bold .li-label { font-weight: 700; }
-
-  .line-item.indent .li-label { padding-left: 16px; }
-
-  /* Section headers inside the label */
-  .label-section-head {
-    padding: 6px 14px;
-    font-size: 14px;
-    font-weight: 900;
-    border-bottom: 3px solid #000;
-    background: #fff;
-  }
-
-  .label-subsection-head {
-    padding: 5px 14px;
-    font-size: 12px;
-    font-weight: 700;
-    border-bottom: 1px solid #000;
-  }
-
-  /* Fees block */
-  .fees-block {
-    border-bottom: 8px solid #000;
-  }
-
-  .fees-block:last-child { border-bottom: none; }
-
-  /* Disclosures / fine print */
-  .disclosures {
-    padding: 8px 14px 10px;
-    font-size: 9px;
-    color: #555;
-    line-height: 1.4;
-    border-top: 1px solid #ccc;
-  }
-
-  /* Responsive */
   @media (max-width: 1000px) {
     .app { flex-direction: column; }
     .form-panel { width: 100%; min-width: auto; border-right: none; border-bottom: 1px solid #ddd; }
     .preview-panel { padding: 20px 10px; }
-    #label { width: 100%; max-width: 520px; }
+    #label { width: 100%; max-width: 480px; }
   }
 </style>
 </head>
 <body>
-
 <div class="app">
-  <!-- FORM -->
   <div class="form-panel">
     <h1>Broadband Facts Generator</h1>
-    <p class="subtitle">Fill in plan details → preview updates live → download as PNG</p>
+    <p class="subtitle">Fill in plan details — preview updates live — download as PNG</p>
 
     <div class="section-title">Provider & Plan</div>
-    <div class="field">
-      <label>Provider Name</label>
-      <input id="providerName" value="" placeholder="e.g. Ezee Fiber" oninput="render()">
-    </div>
+    <div class="field"><label>Provider Name</label>
+      <input id="providerName" placeholder="e.g. Ezee Fiber" oninput="render()"></div>
     <div class="row">
-      <div class="field">
-        <label>Plan Name</label>
-        <input id="planName" value="" placeholder="e.g. 1 Gig" oninput="render()">
-      </div>
-      <div class="field">
-        <label>Service Type</label>
+      <div class="field"><label>Plan Name</label>
+        <input id="planName" placeholder="e.g. 1 Gig" oninput="render()"></div>
+      <div class="field"><label>Service Type</label>
         <select id="serviceType" onchange="render()">
-          <option value="Fixed Broadband">Fixed Broadband</option>
-          <option value="Mobile Broadband">Mobile Broadband</option>
-        </select>
-      </div>
+          <option value="Fixed">Fixed</option><option value="Mobile">Mobile</option>
+        </select></div>
     </div>
-    <div class="field">
-      <label>FCC Unique Plan ID (optional)</label>
-      <input id="fccId" value="" placeholder="e.g. 123456-001" oninput="render()">
-    </div>
+    <div class="field"><label>Unique Plan Identifier (optional)</label>
+      <input id="fccId" placeholder="e.g. F0005937974123ABC456EMC789" oninput="render()"></div>
 
     <div class="section-title">Monthly Price</div>
     <div class="row">
-      <div class="field">
-        <label>Monthly Price ($)</label>
-        <input id="monthlyPrice" type="number" value="" placeholder="65.00" oninput="render()">
-      </div>
-      <div class="field">
-        <label>Contract Required?</label>
+      <div class="field"><label>Monthly Price ($)</label>
+        <input id="monthlyPrice" type="number" placeholder="80.00" oninput="render()"></div>
+      <div class="field"><label>Contract Required?</label>
         <select id="contractRequired" onchange="render()">
-          <option value="No">No</option>
-          <option value="Yes">Yes</option>
-        </select>
-      </div>
+          <option value="No">No</option><option value="Yes">Yes</option>
+        </select></div>
     </div>
+    <div class="field"><label>Contract Length (if yes)</label>
+      <input id="contractLength" placeholder="e.g. 1 year" oninput="render()"></div>
     <div class="row">
-      <div class="field">
-        <label>Introductory Price ($, optional)</label>
-        <input id="introPrice" type="number" value="" placeholder="49.99" oninput="render()">
-      </div>
-      <div class="field">
-        <label>Intro Duration</label>
-        <input id="introDuration" value="" placeholder="e.g. 12 months" oninput="render()">
-      </div>
+      <div class="field"><label>Introductory Price ($, optional)</label>
+        <input id="introPrice" type="number" placeholder="49.99" oninput="render()"></div>
+      <div class="field"><label>Intro Length</label>
+        <input id="introDuration" placeholder="e.g. 12 months" oninput="render()"></div>
     </div>
 
-    <div class="section-title">Performance</div>
-    <div class="row">
-      <div class="field">
-        <label>Download Speed (Mbps)</label>
-        <input id="downSpeed" value="" placeholder="1000" oninput="render()">
-      </div>
-      <div class="field">
-        <label>Upload Speed (Mbps)</label>
-        <input id="upSpeed" value="" placeholder="1000" oninput="render()">
-      </div>
-    </div>
-    <div class="field">
-      <label>Typical Latency (ms)</label>
-      <input id="latency" value="" placeholder="e.g. ≤ 15" oninput="render()">
-    </div>
-
-    <div class="section-title">Data</div>
-    <div class="row">
-      <div class="field">
-        <label>Monthly Data Cap</label>
-        <select id="dataCap" onchange="render()">
-          <option value="Unlimited">Unlimited</option>
-          <option value="Custom">Custom Cap</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Cap Amount (if custom)</label>
-        <input id="dataCapAmount" value="" placeholder="e.g. 1 TB" oninput="render()">
-      </div>
-    </div>
-    <div class="field">
-      <label>Overage Charges</label>
-      <input id="overage" value="" placeholder="e.g. $10 per 50 GB" oninput="render()">
-    </div>
+    <div class="section-title">Provider Monthly Fees</div>
+    <div id="monthlyFees"></div>
+    <button class="add-btn" onclick="addMonthlyFee()">+ Add Monthly Fee</button>
 
     <div class="section-title">One-Time Fees</div>
     <div id="oneTimeFees"></div>
     <button class="add-btn" onclick="addOneTimeFee()">+ Add One-Time Fee</button>
 
-    <div class="section-title">Monthly Fees & Charges</div>
-    <div id="monthlyFees"></div>
-    <button class="add-btn" onclick="addMonthlyFee()">+ Add Monthly Fee</button>
-
     <div class="section-title">Early Termination Fee</div>
-    <div class="field">
-      <label>Early Termination Fee ($, 0 if none)</label>
-      <input id="etf" type="number" value="0" placeholder="0" oninput="render()">
-    </div>
+    <div class="field"><label>Early Termination Fee ($, blank if none)</label>
+      <input id="etf" type="number" placeholder="0" oninput="render()"></div>
 
     <div class="section-title">Government Taxes</div>
-    <div class="field">
-      <label>Government Taxes</label>
+    <div class="field"><label>Government Taxes</label>
       <select id="govTaxes" onchange="render()">
         <option value="Varies by location">Varies by location</option>
-        <option value="Included in price">Included in price</option>
-        <option value="Custom">Custom amount</option>
-      </select>
+        <option value="Included in monthly price">Included in monthly price</option>
+        <option value="Custom">Custom</option>
+      </select></div>
+    <div class="field"><label>Custom Tax (if custom)</label>
+      <input id="govTaxNote" placeholder="e.g. $3.50/mo" oninput="render()"></div>
+
+    <div class="section-title">Discounts & Bundles</div>
+    <div id="discountRows"></div>
+    <button class="add-btn" onclick="addDiscount()">+ Add Discount</button>
+
+    <div class="section-title">Speeds & Latency</div>
+    <div class="row">
+      <div class="field"><label>Typical Download Speed</label>
+        <input id="downSpeed" placeholder="1000" oninput="render()"></div>
+      <div class="field"><label>Unit</label>
+        <select id="downUnit" onchange="render()">
+          <option value="Mbps">Mbps</option><option value="Gbps">Gbps</option>
+        </select></div>
     </div>
-    <div class="field">
-      <label>Custom Tax Note (if custom)</label>
-      <input id="govTaxNote" value="" placeholder="e.g. $3.50/mo" oninput="render()">
+    <div class="row">
+      <div class="field"><label>Typical Upload Speed</label>
+        <input id="upSpeed" placeholder="1000" oninput="render()"></div>
+      <div class="field"><label>Unit</label>
+        <select id="upUnit" onchange="render()">
+          <option value="Mbps">Mbps</option><option value="Gbps">Gbps</option>
+        </select></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Typical Latency</label>
+        <input id="latency" placeholder="15" oninput="render()"></div>
+      <div class="field"><label>Unit</label>
+        <select id="latUnit" onchange="render()"><option value="ms">ms</option></select></div>
     </div>
 
-    <div class="section-title">Discounts</div>
-    <div class="field">
-      <label>Available Discounts (optional)</label>
-      <textarea id="discounts" rows="2" placeholder="e.g. Bundling discount: -$10/mo&#10;ACP: -$30/mo" oninput="render()"></textarea>
+    <div class="section-title">Data Included</div>
+    <div class="row">
+      <div class="field"><label>Data Amount</label>
+        <input id="dataAmount" placeholder="e.g. 1,200 or Unlimited" oninput="render()"></div>
+      <div class="field"><label>Unit</label>
+        <select id="dataUnit" onchange="render()">
+          <option value="GB">GB</option><option value="TB">TB</option>
+          <option value="Unlimited">Unlimited (no unit)</option>
+        </select></div>
     </div>
+    <div class="field"><label>Charges for Additional Data Usage</label>
+      <input id="overage" placeholder="e.g. $10/50 GB or n/a" oninput="render()"></div>
 
-    <div class="section-title">Network & Privacy</div>
-    <div class="field">
-      <label>Network Management Summary</label>
-      <input id="networkMgmt" value="See provider's network management practices" placeholder="" oninput="render()">
-    </div>
-    <div class="field">
-      <label>Privacy Policy Summary</label>
-      <input id="privacyPolicy" value="See provider's privacy policy" placeholder="" oninput="render()">
+    <div class="section-title">Links & Support</div>
+    <div class="field"><label>Network Management Policy URL</label>
+      <input id="netMgmtUrl" placeholder="https://example.com/network-management" oninput="render()"></div>
+    <div class="field"><label>Privacy Policy URL</label>
+      <input id="privacyUrl" placeholder="https://example.com/privacy" oninput="render()"></div>
+    <div class="row">
+      <div class="field"><label>Support Phone</label>
+        <input id="supportPhone" placeholder="(555) 555-5555" oninput="render()"></div>
+      <div class="field"><label>Support Website</label>
+        <input id="supportWeb" placeholder="https://example.com" oninput="render()"></div>
     </div>
 
     <div class="actions">
@@ -451,283 +263,210 @@
     </div>
   </div>
 
-  <!-- PREVIEW -->
   <div class="preview-panel">
     <div id="label"></div>
   </div>
 </div>
 
 <script>
-  let oneTimeFees = [];
-  let monthlyFees = [];
+let oneTimeFees=[], monthlyFees=[], discounts=[];
 
-  function addOneTimeFee(name, amount) {
-    oneTimeFees.push({ name: name || '', amount: amount || '' });
-    renderFeeInputs();
-    render();
+function addOneTimeFee(n,a){oneTimeFees.push({name:n||'',amount:a||''});rfi();render();}
+function removeOneTimeFee(i){oneTimeFees.splice(i,1);rfi();render();}
+function addMonthlyFee(n,a){monthlyFees.push({name:n||'',amount:a||''});rfi();render();}
+function removeMonthlyFee(i){monthlyFees.splice(i,1);rfi();render();}
+function addDiscount(n,a){discounts.push({name:n||'',amount:a||''});rfi();render();}
+function removeDiscount(i){discounts.splice(i,1);rfi();render();}
+
+function rfi(){
+  document.getElementById('monthlyFees').innerHTML=monthlyFees.map((f,i)=>`
+    <div class="fee-row">
+      <div class="field"><label>Name</label>
+        <input value="${esc(f.name)}" oninput="monthlyFees[${i}].name=this.value;render()" placeholder="e.g. Router Rental"></div>
+      <div class="field"><label>$/mo</label>
+        <input value="${esc(f.amount)}" oninput="monthlyFees[${i}].amount=this.value;render()" placeholder="10.00"></div>
+      <button onclick="removeMonthlyFee(${i})">×</button>
+    </div>`).join('');
+
+  document.getElementById('oneTimeFees').innerHTML=oneTimeFees.map((f,i)=>`
+    <div class="fee-row">
+      <div class="field"><label>Name</label>
+        <input value="${esc(f.name)}" oninput="oneTimeFees[${i}].name=this.value;render()" placeholder="e.g. Installation"></div>
+      <div class="field"><label>$</label>
+        <input value="${esc(f.amount)}" oninput="oneTimeFees[${i}].amount=this.value;render()" placeholder="99.00"></div>
+      <button onclick="removeOneTimeFee(${i})">×</button>
+    </div>`).join('');
+
+  document.getElementById('discountRows').innerHTML=discounts.map((f,i)=>`
+    <div class="fee-row">
+      <div class="field"><label>Name</label>
+        <input value="${esc(f.name)}" oninput="discounts[${i}].name=this.value;render()" placeholder="e.g. Bundle discount"></div>
+      <div class="field"><label>Amount</label>
+        <input value="${esc(f.amount)}" oninput="discounts[${i}].amount=this.value;render()" placeholder="-$10/mo"></div>
+      <button onclick="removeDiscount(${i})">×</button>
+    </div>`).join('');
+}
+
+function esc(s){return String(s).replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function escH(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function $(id){return document.getElementById(id).value;}
+function fmt(v){const n=parseFloat(v);return isNaN(n)?'':'$'+n.toFixed(2);}
+
+function li(label,value){
+  return '<div class="bb-li"><span class="l">'+label+'</span><span class="v">'+value+'</span></div>';
+}
+
+function render(){
+  const prov=$('providerName')||'[Provider Name]';
+  const plan=$('planName')||'[Plan Name]';
+  const type=$('serviceType');
+  const upi=$('fccId');
+  const price=$('monthlyPrice');
+  const contract=$('contractRequired');
+  const cLen=$('contractLength');
+  const introP=$('introPrice');
+  const introD=$('introDuration');
+  const down=$('downSpeed')||'000';
+  const downU=$('downUnit');
+  const up=$('upSpeed')||'000';
+  const upU=$('upUnit');
+  const lat=$('latency')||'00';
+  const latU=$('latUnit');
+  const dataAmt=$('dataAmount')||'000';
+  const dataU=$('dataUnit');
+  const ovr=$('overage')||'n/a';
+  const etf=$('etf');
+  const govT=$('govTaxes');
+  const govN=$('govTaxNote');
+  const netU=$('netMgmtUrl');
+  const priU=$('privacyUrl');
+  const ph=$('supportPhone');
+  const web=$('supportWeb');
+
+  const govD=govT==='Custom'?escH(govN||'—'):escH(govT);
+  const isUnl=dataAmt.toLowerCase().includes('unlim')||dataU==='Unlimited';
+
+  let mfR='';monthlyFees.forEach(f=>{if(f.name)mfR+=li(escH(f.name),fmt(f.amount)||escH(f.amount));});
+  let otR='';oneTimeFees.forEach(f=>{if(f.name)otR+=li(escH(f.name),fmt(f.amount)||escH(f.amount));});
+  let dsR='';discounts.forEach(f=>{if(f.name)dsR+=li(escH(f.name),escH(f.amount));});
+
+  let introHTML='';
+  if(introP){
+    introHTML='<div class="bb-price-intro"><b>Introductory rate:</b> '+fmt(introP)+'/mo'+(introD?' for '+escH(introD):'')+'<br><span style="font-size:10px;color:#333;">Price after introductory period: '+(price?fmt(price):' $__.__')+'/mo</span></div>';
   }
 
-  function removeOneTimeFee(i) {
-    oneTimeFees.splice(i, 1);
-    renderFeeInputs();
-    render();
-  }
+  document.getElementById('label').innerHTML=`
+    <div class="bb-header"><h2>Broadband Facts</h2></div>
 
-  function addMonthlyFee(name, amount) {
-    monthlyFees.push({ name: name || '', amount: amount || '' });
-    renderFeeInputs();
-    render();
-  }
+    <div class="bb-provider">
+      <span class="pn">${escH(prov)}</span><br>
+      ${escH(type)} Broadband &mdash; ${escH(plan)}
+    </div>
 
-  function removeMonthlyFee(i) {
-    monthlyFees.splice(i, 1);
-    renderFeeInputs();
-    render();
-  }
-
-  function renderFeeInputs() {
-    const otc = document.getElementById('oneTimeFees');
-    otc.innerHTML = oneTimeFees.map((f, i) => `
-      <div class="fee-row">
-        <div class="field">
-          <label>Fee Name</label>
-          <input value="${esc(f.name)}" oninput="oneTimeFees[${i}].name=this.value;render()" placeholder="e.g. Installation">
-        </div>
-        <div class="field">
-          <label>Amount ($)</label>
-          <input value="${esc(f.amount)}" oninput="oneTimeFees[${i}].amount=this.value;render()" placeholder="99.00">
-        </div>
-        <button onclick="removeOneTimeFee(${i})">×</button>
+    <div class="bb-price">
+      <div class="bb-price-main">
+        <span class="lbl">Monthly Price</span>
+        <span class="val">${price?fmt(price):'$__.__'}<span class="unit">/mo</span></span>
       </div>
-    `).join('');
-
-    const mc = document.getElementById('monthlyFees');
-    mc.innerHTML = monthlyFees.map((f, i) => `
-      <div class="fee-row">
-        <div class="field">
-          <label>Fee Name</label>
-          <input value="${esc(f.name)}" oninput="monthlyFees[${i}].name=this.value;render()" placeholder="e.g. Router Rental">
-        </div>
-        <div class="field">
-          <label>Amount ($)</label>
-          <input value="${esc(f.amount)}" oninput="monthlyFees[${i}].amount=this.value;render()" placeholder="10.00">
-        </div>
-        <button onclick="removeMonthlyFee(${i})">×</button>
+      <div class="bb-price-sub">
+        This monthly price does not include one-time fees, monthly fees
+        for additional services, equipment charges, or taxes.
+        ${contract==='Yes'?' <b>Contract required'+(cLen?' ('+escH(cLen)+')':'')+'. </b>':' <b>No contract required.</b>'}
       </div>
-    `).join('');
-  }
+      ${introHTML}
+    </div>
 
-  function esc(s) {
-    return String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;');
-  }
+    <div class="bb-blk" style="border-bottom:7px solid #000;">
+      <div class="bb-sh">Additional Charges &amp; Terms</div>
 
-  function $(id) { return document.getElementById(id).value; }
+      <div class="bb-ssh">Provider Monthly Fees</div>
+      ${mfR||li('None','')}
 
-  function fmt(v) {
-    const n = parseFloat(v);
-    if (isNaN(n)) return v || '—';
-    return '$' + n.toFixed(2);
-  }
+      <div class="bb-ssh" style="border-top:1px solid #000;">One-Time Fees at the Time of Purchase</div>
+      ${otR||li('None','')}
 
-  function render() {
-    const provider = $('providerName') || 'Provider Name';
-    const plan = $('planName') || 'Plan Name';
-    const serviceType = $('serviceType');
-    const fccId = $('fccId');
-    const price = $('monthlyPrice');
-    const contract = $('contractRequired');
-    const introPrice = $('introPrice');
-    const introDur = $('introDuration');
-    const down = $('downSpeed') || '—';
-    const up = $('upSpeed') || '—';
-    const lat = $('latency') || '—';
-    const dataCap = $('dataCap');
-    const dataCapAmt = $('dataCapAmount');
-    const overage = $('overage');
-    const etf = $('etf');
-    const govTaxes = $('govTaxes');
-    const govTaxNote = $('govTaxNote');
-    const discounts = $('discounts');
-    const networkMgmt = $('networkMgmt');
-    const privacyPolicy = $('privacyPolicy');
+      <div class="bb-ssh" style="border-top:1px solid #000;">Early Termination Fee</div>
+      ${li('Early Termination Fee',etf&&parseFloat(etf)>0?fmt(etf):'None')}
 
-    const dataDisplay = dataCap === 'Unlimited' ? 'Unlimited' : (dataCapAmt || '—');
+      <div class="bb-ssh" style="border-top:1px solid #000;">Government Taxes</div>
+      ${li('Government Taxes &amp; Fees',govD)}
 
-    // Calculate total monthly
-    let totalMonthly = parseFloat(price) || 0;
-    monthlyFees.forEach(f => { totalMonthly += parseFloat(f.amount) || 0; });
+      <div class="bb-ssh" style="border-top:1px solid #000;">Discounts &amp; Bundles</div>
+      ${dsR||li('None','')}
+    </div>
 
-    // Build fee rows
-    let otfHTML = '';
-    oneTimeFees.forEach(f => {
-      if (f.name) {
-        otfHTML += lineItem(f.name, fmt(f.amount), false, true);
-      }
-    });
-    if (!otfHTML) otfHTML = lineItem('None', '', false, true);
-
-    let mfHTML = '';
-    monthlyFees.forEach(f => {
-      if (f.name) {
-        mfHTML += lineItem(f.name, fmt(f.amount), false, true);
-      }
-    });
-
-    // Discounts
-    let discountHTML = '';
-    if (discounts.trim()) {
-      discounts.trim().split('\n').forEach(d => {
-        if (d.trim()) {
-          const parts = d.split(':');
-          if (parts.length > 1) {
-            discountHTML += lineItem(parts[0].trim(), parts.slice(1).join(':').trim(), false, true);
-          } else {
-            discountHTML += lineItem(d.trim(), '', false, true);
-          }
-        }
-      });
-    }
-
-    const govDisplay = govTaxes === 'Custom' ? (govTaxNote || 'Custom') : govTaxes;
-
-    const html = `
-      <div class="label-header">
-        <h2>Broadband Facts</h2>
+    <div class="bb-blk" style="border-bottom:7px solid #000;">
+      <div class="bb-sh">Speeds Provided with Plan</div>
+      <div class="bb-sr">
+        <span class="sl">Typical Download Speed</span>
+        <span class="sv">${escH(down)}</span>
+        <span class="su">${escH(downU)}</span>
       </div>
-
-      <div class="label-provider">
-        <div class="provider-name">${escH(provider)}</div>
-        <div class="plan-name">${escH(serviceType)} — ${escH(plan)}</div>
-        ${fccId ? `<div class="fcc-id">FCC ID: ${escH(fccId)}</div>` : ''}
+      <div class="bb-sr">
+        <span class="sl">Typical Upload Speed</span>
+        <span class="sv">${escH(up)}</span>
+        <span class="su">${escH(upU)}</span>
       </div>
-
-      <!-- Monthly Price -->
-      <div class="price-section">
-        <div class="price-main">
-          <span>Monthly Price</span>
-          <span class="amount">${price ? fmt(price) : '—'}<span style="font-size:12px;font-weight:400">/mo</span></span>
-        </div>
-        ${contract === 'Yes' ? '<div class="price-note">Contract required</div>' : '<div class="price-note">No contract required</div>'}
-        ${introPrice ? `
-          <div class="intro-row" style="margin-top:6px;padding-top:6px;border-top:1px solid #ccc;">
-            <span>Introductory Rate</span>
-            <span style="font-weight:700">${fmt(introPrice)}/mo${introDur ? ' for ' + escH(introDur) : ''}</span>
-          </div>
-        ` : ''}
+      <div class="bb-sr" style="border-bottom:none;">
+        <span class="sl">Typical Latency</span>
+        <span class="sv">${escH(lat)}</span>
+        <span class="su">${escH(latU)}</span>
       </div>
+    </div>
 
-      <!-- Additional Monthly Charges -->
-      ${mfHTML ? `
-        <div class="fees-block">
-          <div class="label-subsection-head">Additional Monthly Charges</div>
-          ${mfHTML}
-          <div class="line-item bold" style="border-top:2px solid #000;">
-            <span class="li-label">Total Monthly Charges</span>
-            <span class="li-value">${fmt(totalMonthly.toFixed(2))}/mo</span>
-          </div>
-        </div>
-      ` : ''}
-
-      <!-- One-Time Fees -->
-      <div class="fees-block">
-        <div class="label-subsection-head">One-Time Fees</div>
-        ${otfHTML}
+    <div class="bb-blk" style="border-bottom:7px solid #000;">
+      <div class="bb-sh">Data Included with Monthly Price</div>
+      <div class="bb-dr">
+        <span class="dv">${isUnl?'Unlimited':escH(dataAmt)}</span>
+        ${!isUnl?'<span class="du">'+escH(dataU)+'</span>':''}
       </div>
-
-      <!-- Early Termination -->
-      <div class="fees-block">
-        <div class="label-subsection-head">Early Termination Fee</div>
-        ${lineItem('Early Termination Fee', etf && parseFloat(etf) > 0 ? fmt(etf) : 'None')}
+      <div class="bb-li">
+        <span class="l">Charges for Additional Data Usage</span>
+        <span class="v">${escH(ovr)}</span>
       </div>
+    </div>
 
-      <!-- Government Taxes -->
-      <div class="fees-block">
-        <div class="label-subsection-head">Government Taxes</div>
-        ${lineItem('Government Taxes & Fees', escH(govDisplay))}
+    <div class="bb-lnk">
+      <span class="ll">Network Management Policy</span>
+      <span class="lu">${escH(netU||'https://www.example.com/network-management')}</span>
+    </div>
+    <div class="bb-lnk">
+      <span class="ll">Privacy Policy</span>
+      <span class="lu">${escH(priU||'https://www.example.com/privacy')}</span>
+    </div>
+
+    <div style="border-bottom:1px solid #bbb;">
+      <div class="bb-ssh">Customer Support</div>
+      <div style="padding:4px 14px 8px;font-size:11px;">
+        <div><b>Phone:</b> ${escH(ph||'(555) 555-5555')}</div>
+        <div><b>Website:</b> <span style="color:#0055cc;text-decoration:underline;">${escH(web||'https://www.example.com')}</span></div>
       </div>
+    </div>
 
-      ${discountHTML ? `
-        <div class="fees-block">
-          <div class="label-subsection-head">Discounts & Bundles</div>
-          ${discountHTML}
-        </div>
-      ` : ''}
+    <div class="bb-foot">
+      Learn about the terms used on this label. Visit the Federal
+      Communications Commission&rsquo;s Consumer Resource Center.
+    </div>
+    ${upi?'<div class="bb-upi">Unique Plan Identifier: '+escH(upi)+'</div>':''}
+  `;
+}
 
-      <!-- Performance -->
-      <div class="fees-block">
-        <div class="label-section-head">Performance</div>
-        ${lineItem('Typical Download Speed', escH(down) + ' Mbps', true)}
-        ${lineItem('Typical Upload Speed', escH(up) + ' Mbps', true)}
-        ${lineItem('Typical Latency', escH(lat) + (lat !== '—' && !lat.includes('ms') ? ' ms' : ''), true)}
-      </div>
+function downloadLabel(){
+  html2canvas(document.getElementById('label'),{scale:3,backgroundColor:'#fff',useCORS:true}).then(c=>{
+    const a=document.createElement('a');
+    const p=$('providerName')||'broadband',n=$('planName')||'label';
+    a.download=p.replace(/\s+/g,'_')+'_'+n.replace(/\s+/g,'_')+'_broadband_facts.png';
+    a.href=c.toDataURL('image/png');a.click();
+  });
+}
 
-      <!-- Data -->
-      <div class="fees-block">
-        <div class="label-section-head">Data Included with Monthly Price</div>
-        ${lineItem('Monthly Data Allowance', escH(dataDisplay), true)}
-        ${dataCap !== 'Unlimited' && overage ? lineItem('Overage Charges', escH(overage), false, true) : ''}
-      </div>
+function resetForm(){
+  document.querySelectorAll('.form-panel input, .form-panel textarea').forEach(e=>e.value='');
+  document.querySelectorAll('.form-panel select').forEach(e=>e.selectedIndex=0);
+  oneTimeFees=[];monthlyFees=[];discounts=[];rfi();render();
+}
 
-      <!-- Network / Privacy -->
-      <div class="disclosures">
-        <strong>Network Management:</strong> ${escH(networkMgmt)}<br>
-        <strong>Privacy:</strong> ${escH(privacyPolicy)}<br><br>
-        For more information, visit the provider's website or contact customer service.<br>
-        Learn more about broadband labels at <strong>fcc.gov/broadbandlabels</strong>
-      </div>
-    `;
-
-    document.getElementById('label').innerHTML = html;
-  }
-
-  function lineItem(label, value, bold, indent) {
-    return `<div class="line-item${bold ? ' bold' : ''}${indent ? ' indent' : ''}">
-      <span class="li-label">${label}</span>
-      <span class="li-value">${value}</span>
-    </div>`;
-  }
-
-  function escH(s) {
-    const d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
-  }
-
-  function downloadLabel() {
-    const el = document.getElementById('label');
-    html2canvas(el, {
-      scale: 3,
-      backgroundColor: '#ffffff',
-      useCORS: true
-    }).then(canvas => {
-      const a = document.createElement('a');
-      const provider = $('providerName') || 'broadband';
-      const plan = $('planName') || 'label';
-      a.download = `${provider.replace(/\s+/g, '_')}_${plan.replace(/\s+/g, '_')}_broadband_facts.png`;
-      a.href = canvas.toDataURL('image/png');
-      a.click();
-    });
-  }
-
-  function resetForm() {
-    document.querySelectorAll('.form-panel input, .form-panel textarea').forEach(el => {
-      if (el.type === 'number') el.value = '';
-      else if (el.id === 'etf') el.value = '0';
-      else if (el.id === 'networkMgmt') el.value = "See provider's network management practices";
-      else if (el.id === 'privacyPolicy') el.value = "See provider's privacy policy";
-      else el.value = '';
-    });
-    document.querySelectorAll('.form-panel select').forEach(el => el.selectedIndex = 0);
-    oneTimeFees = [];
-    monthlyFees = [];
-    renderFeeInputs();
-    render();
-  }
-
-  // Init
-  renderFeeInputs();
-  render();
+rfi();render();
 </script>
-
 </body>
 </html>
