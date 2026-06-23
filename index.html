@@ -5,34 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Broadband Facts Label Generator</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #e8e8e8;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #e4e4e7;
     min-height: 100vh;
   }
   .app {
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: 350px 1fr;
     min-height: 100vh;
   }
 
   /* ── FORM ── */
-  .form-panel {
+  .fp {
     background: #fff;
-    border-right: 1px solid #d0d0d0;
+    border-right: 1px solid #d4d4d8;
     padding: 20px;
     overflow-y: auto;
     max-height: 100vh;
   }
-  .form-panel h1 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
-  .form-panel .sub { font-size: 11px; color: #999; margin-bottom: 14px; }
+  .fp h1 { font-size: 14px; font-weight: 700; }
+  .fp .sub { font-size: 10px; color: #a1a1aa; margin-bottom: 14px; }
 
   .sec {
     font-size: 9px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.1em; color: #aaa;
-    margin: 14px 0 5px; padding-top: 10px; border-top: 1px solid #eee;
+    letter-spacing: 0.1em; color: #a1a1aa;
+    margin: 14px 0 5px; padding-top: 10px; border-top: 1px solid #f0f0f0;
   }
   .sec:first-of-type { border: none; padding-top: 0; }
 
@@ -40,208 +41,207 @@
   .row > * { flex: 1; }
   .field { margin-bottom: 5px; }
   .field label {
-    display: block; font-size: 10px; font-weight: 600; color: #777; margin-bottom: 1px;
+    display: block; font-size: 10px; font-weight: 600; color: #71717a; margin-bottom: 1px;
   }
-  .field input, .field select {
-    width: 100%; padding: 5px 7px; border: 1px solid #ddd; border-radius: 4px;
+  .field input, .field textarea {
+    width: 100%; padding: 5px 7px; border: 1px solid #e4e4e7; border-radius: 5px;
     font-size: 13px; font-family: inherit; outline: none;
   }
-  .field input:focus { border-color: #333; }
-  .field input::placeholder { color: #c0c0c0; }
+  .field input:focus, .field textarea:focus { border-color: #333; }
+  .field input::placeholder, .field textarea::placeholder { color: #c0c0c0; }
+  .field textarea { resize: vertical; min-height: 40px; font-size: 12px; }
 
-  .charge-row {
+  .cr {
     display: flex; align-items: center; gap: 4px; margin-bottom: 3px;
   }
-  .charge-row input:first-child { flex: 2; }
-  .charge-row input:nth-child(2) { flex: 1; }
-  .charge-row .x {
-    background: none; border: none; color: #ccc; cursor: pointer;
+  .cr input:first-child { flex: 2; }
+  .cr input:nth-child(2) { flex: 1; }
+  .cr .x {
+    background: none; border: none; color: #d4d4d8; cursor: pointer;
     font-size: 15px; padding: 0 3px; line-height: 1;
   }
-  .charge-row .x:hover { color: #e44; }
+  .cr .x:hover { color: #ef4444; }
 
   .add-btn {
-    background: none; border: 1px dashed #ccc; border-radius: 4px;
-    padding: 3px 8px; font-size: 10px; color: #999; cursor: pointer; width: 100%;
+    background: none; border: 1px dashed #d4d4d8; border-radius: 5px;
+    padding: 3px 8px; font-size: 10px; color: #a1a1aa; cursor: pointer; width: 100%;
   }
   .add-btn:hover { border-color: #888; color: #555; }
 
   .actions {
-    display: flex; gap: 6px; margin-top: 16px; padding-top: 10px; border-top: 1px solid #eee;
+    display: flex; gap: 6px; margin-top: 16px; padding-top: 10px; border-top: 1px solid #f0f0f0;
   }
   .btn {
-    flex: 1; padding: 9px; border: none; border-radius: 5px;
+    flex: 1; padding: 9px; border: none; border-radius: 6px;
     font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
   }
-  .btn-dark { background: #111; color: #fff; }
+  .btn-dark { background: #18181b; color: #fff; }
   .btn-dark:hover { background: #333; }
-  .btn-light { background: #eee; color: #555; }
-  .btn-light:hover { background: #ddd; }
+  .btn-lt { background: #f4f4f5; color: #52525b; }
+  .btn-lt:hover { background: #e4e4e7; }
 
   /* ── PREVIEW ── */
-  .preview-panel {
+  .pp {
     display: flex; align-items: center; justify-content: center;
     padding: 40px; overflow: auto;
   }
 
-  /* ════════════════════════════════════════
-     THE LABEL — matches official FCC format
-     ════════════════════════════════════════ */
+  /* ═══════════════════════════════════
+     THE LABEL — clean slick-ready card
+     ═══════════════════════════════════ */
   #label {
-    width: 300px;
+    width: 290px;
     background: #fff;
-    border: 2.5px solid #000;
-    font-family: Helvetica, Arial, sans-serif;
-    color: #000;
-    line-height: 1.3;
+    border: 2px solid #18181b;
+    border-radius: 10px;
+    font-family: 'Inter', Helvetica, Arial, sans-serif;
+    color: #18181b;
+    overflow: hidden;
   }
 
-  /* Black header */
-  .bb-header {
-    background: #000; color: #fff;
-    padding: 7px 12px 6px;
-    font-size: 18px; font-weight: 700;
-    letter-spacing: -0.01em;
+  .lb-head {
+    background: #18181b;
+    color: #fff;
+    padding: 10px 16px 9px;
+  }
+  .lb-head-title {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .lb-head-plan {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.7;
+    margin-top: 1px;
   }
 
-  /* Provider + plan */
-  .bb-provider {
-    padding: 5px 12px 1px;
-    font-size: 12px; font-weight: 700;
+  .lb-price-block {
+    padding: 12px 16px 10px;
+    border-bottom: 1.5px solid #e4e4e7;
   }
-  .bb-plan {
-    padding: 0 12px 5px;
-    font-size: 11px; color: #333;
+  .lb-price-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #a1a1aa;
+    margin-bottom: 1px;
   }
+  .lb-price {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .lb-price .cents { font-size: 18px; }
+  .lb-price .mo { font-size: 14px; font-weight: 500; color: #71717a; }
 
-  /* Thick divider */
-  .bb-thick { border-top: 3px solid #000; }
-  /* Medium divider */
-  .bb-med { border-top: 2px solid #000; }
-  /* Thin divider */
-  .bb-thin { border-top: 1px solid #000; }
-
-  /* Section block */
-  .bb-sec { padding: 5px 12px; }
-
-  /* Section title */
-  .bb-sec-title {
-    font-size: 12.5px; font-weight: 700;
+  .lb-speeds {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1.5px solid #e4e4e7;
+  }
+  .lb-speed-cell {
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .lb-speed-cell:not(:last-child) {
+    border-right: 1.5px solid #e4e4e7;
+  }
+  .lb-speed-lbl {
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #a1a1aa;
     margin-bottom: 2px;
   }
-
-  /* Price big */
-  .bb-price-row {
-    padding: 3px 12px 1px;
+  .lb-speed-val {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
   }
-  .bb-price-big {
-    font-size: 28px; font-weight: 700; line-height: 1.1;
-  }
-  .bb-price-mo {
-    font-size: 13px; font-weight: 400; color: #333;
-  }
-
-  /* Contract line */
-  .bb-contract {
-    padding: 0 12px 5px;
-    font-size: 10px; color: #555;
+  .lb-speed-unit {
+    font-size: 9px;
+    font-weight: 500;
+    color: #71717a;
   }
 
-  /* Standard left/right row */
-  .bb-row {
-    display: flex; justify-content: space-between;
+  .lb-fees {
+    padding: 10px 16px;
+  }
+  .lb-fees:empty { display: none; }
+  .lb-fees-title {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #a1a1aa;
+    margin-bottom: 5px;
+  }
+  .lb-fee-row {
+    display: flex;
+    justify-content: space-between;
     align-items: baseline;
-    padding: 1.5px 0;
-    font-size: 11px;
+    font-size: 11.5px;
+    padding: 2px 0;
   }
-  .bb-row .r { font-weight: 700; text-align: right; white-space: nowrap; }
-  .bb-row.indent { padding-left: 10px; }
-  .bb-row.sub { font-size: 10px; color: #444; }
-
-  /* Speed 2x2 grid */
-  .bb-speeds {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .bb-speed-cell {
-    padding: 4px 12px;
-    font-size: 10.5px;
-  }
-  .bb-speed-cell:nth-child(odd) { border-right: 1px solid #000; }
-  .bb-speed-cell:nth-child(n+3) { border-top: 1px solid #000; }
-  .bb-speed-lbl { font-size: 9px; color: #555; }
-  .bb-speed-val { font-size: 13px; font-weight: 700; }
-
-  /* Data cap row */
-  .bb-data { padding: 5px 12px; font-size: 11px; }
-  .bb-data strong { font-weight: 700; }
-
-  /* Notes */
-  .bb-notes {
-    padding: 5px 12px 6px;
-    font-size: 10px; font-style: italic; color: #333;
-    line-height: 1.35;
+  .lb-fee-row .v {
+    font-weight: 700;
+    white-space: nowrap;
   }
 
-  .field textarea {
-    width: 100%; padding: 5px 7px; border: 1px solid #ddd; border-radius: 4px;
-    font-size: 12px; font-family: inherit; outline: none; resize: vertical;
-    min-height: 42px;
+  .lb-notes {
+    padding: 8px 16px 10px;
+    border-top: 1.5px solid #e4e4e7;
+    font-size: 10px;
+    color: #52525b;
+    font-style: italic;
+    line-height: 1.4;
   }
-  .field textarea:focus { border-color: #333; }
-  .field textarea::placeholder { color: #c0c0c0; }
+
+  .lb-foot {
+    background: #f9f9fa;
+    padding: 6px 16px;
+    font-size: 8px;
+    color: #a1a1aa;
+    text-align: center;
+    border-top: 1.5px solid #e4e4e7;
+  }
 
   @media (max-width: 780px) {
     .app { grid-template-columns: 1fr; }
-    .preview-panel { padding: 20px; }
+    .pp { padding: 20px; }
   }
 </style>
 </head>
 <body>
 <div class="app">
-<div class="form-panel">
-  <h1>Broadband Facts Generator</h1>
-  <div class="sub">Fill in → Download PNG → Drop in Canva slick</div>
+<div class="fp">
+  <h1>Broadband Label Generator</h1>
+  <div class="sub">Fill in → Download PNG → Drop in slick</div>
 
   <div class="sec">Provider & Plan</div>
   <div class="row">
-    <div class="field"><label>Provider</label><input id="fProvider" placeholder="Ezee Fiber" oninput="render()"></div>
+    <div class="field"><label>Provider</label><input id="fProv" placeholder="Ezee Fiber" oninput="render()"></div>
     <div class="field"><label>Plan Name</label><input id="fPlan" placeholder="1 GIG" oninput="render()"></div>
   </div>
 
   <div class="sec">Monthly Price</div>
-  <div class="row">
-    <div class="field"><label>Price ($/mo)</label><input id="fPrice" placeholder="79.99" oninput="render()"></div>
-    <div class="field"><label>Contract</label><input id="fContract" placeholder="No contract" oninput="render()"></div>
-  </div>
-  <div class="row">
-    <div class="field"><label>Intro Price (optional)</label><input id="fIntroPrice" placeholder="" oninput="render()"></div>
-    <div class="field"><label>Intro Length</label><input id="fIntroLen" placeholder="" oninput="render()"></div>
-  </div>
-
-  <div class="sec">Additional Monthly Charges</div>
-  <div id="mCharges"></div>
-  <button class="add-btn" onclick="addC('m')">+ Add Charge</button>
-
-  <div class="sec">One-Time Fees</div>
-  <div id="oCharges"></div>
-  <button class="add-btn" onclick="addC('o')">+ Add Fee</button>
-
-  <div class="sec">Early Termination & Taxes</div>
-  <div class="row">
-    <div class="field"><label>Early Termination Fee</label><input id="fETF" value="$0" oninput="render()"></div>
-    <div class="field"><label>Gov't Taxes</label><input id="fTax" value="Included" oninput="render()"></div>
-  </div>
+  <div class="field"><label>Price ($/mo)</label><input id="fPrice" placeholder="79.99" oninput="render()"></div>
 
   <div class="sec">Performance</div>
   <div class="row">
-    <div class="field"><label>Download Speed</label><input id="fDL" placeholder="1000 Mbps" oninput="render()"></div>
-    <div class="field"><label>Upload Speed</label><input id="fUL" placeholder="1000 Mbps" oninput="render()"></div>
+    <div class="field"><label>Download</label><input id="fDL" placeholder="1000 Mbps" oninput="render()"></div>
+    <div class="field"><label>Upload</label><input id="fUL" placeholder="1000 Mbps" oninput="render()"></div>
+    <div class="field"><label>Latency</label><input id="fLat" placeholder="≤ 5 ms" oninput="render()"></div>
   </div>
-  <div class="row">
-    <div class="field"><label>Typical Latency</label><input id="fLat" placeholder="≤ 5 ms" oninput="render()"></div>
-    <div class="field"><label>Data Cap</label><input id="fCap" value="Unlimited" oninput="render()"></div>
-  </div>
+
+  <div class="sec">Fees & Charges</div>
+  <div id="fees"></div>
+  <button class="add-btn" onclick="addF()">+ Add Fee</button>
 
   <div class="sec">Notes (optional)</div>
   <div class="field">
@@ -250,180 +250,117 @@
   </div>
 
   <div class="actions">
-    <button class="btn btn-dark" onclick="dl(false)">Download PNG</button>
-    <button class="btn btn-light" onclick="dl(true)">Transparent</button>
-    <button class="btn btn-light" onclick="resetAll()">Reset</button>
+    <button class="btn btn-dark" onclick="dlPNG(false)">Download PNG</button>
+    <button class="btn btn-lt" onclick="dlPNG(true)">Transparent</button>
+    <button class="btn btn-lt" onclick="resetAll()">Reset</button>
   </div>
 </div>
 
-<div class="preview-panel">
+<div class="pp">
   <div id="label"></div>
 </div>
 </div>
 
 <script>
-const $=id=>document.getElementById(id).value.trim();
+const V=id=>document.getElementById(id).value.trim();
 const esc=s=>s.replace(/"/g,'&quot;');
 const escH=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML;};
 
-let mFees=[{n:'Hidden Monthly Fees',v:'$0'},{n:'Local Access Fees',v:'$0'}];
-let oFees=[{n:'Installation Fee',v:'$0'},{n:'Equipment Fee',v:'$0'}];
+let fees=[
+  {n:'Installation',v:'$0'},
+  {n:'Equipment Fee',v:'$0'},
+  {n:'Hidden Monthly Fees',v:'$0'},
+];
 
-function addC(t){
-  (t==='m'?mFees:oFees).push({n:'',v:'$0'});
-  renderInputs(); render();
-}
-function rmC(t,i){
-  (t==='m'?mFees:oFees).splice(i,1);
-  renderInputs(); render();
-}
-function upC(t,i,f,v){
-  const a=t==='m'?mFees:oFees; a[i][f]=v; render();
-}
+function addF(){fees.push({n:'',v:'$0'});renderF();render();}
+function rmF(i){fees.splice(i,1);renderF();render();}
+function upF(i,f,v){fees[i][f]=v;render();}
 
-function renderInputs(){
-  ['m','o'].forEach(t=>{
-    const a=t==='m'?mFees:oFees;
-    const el=document.getElementById(t==='m'?'mCharges':'oCharges');
-    el.innerHTML=a.map((c,i)=>`<div class="charge-row">
-      <input value="${esc(c.n)}" placeholder="Fee name" oninput="upC('${t}',${i},'n',this.value)">
-      <input value="${esc(c.v)}" placeholder="$0" oninput="upC('${t}',${i},'v',this.value)">
-      <button class="x" onclick="rmC('${t}',${i})">&times;</button>
-    </div>`).join('');
-  });
+function renderF(){
+  document.getElementById('fees').innerHTML=fees.map((f,i)=>`<div class="cr">
+    <input value="${esc(f.n)}" placeholder="Fee name" oninput="upF(${i},'n',this.value)">
+    <input value="${esc(f.v)}" placeholder="$0" oninput="upF(${i},'v',this.value)">
+    <button class="x" onclick="rmF(${i})">&times;</button>
+  </div>`).join('');
 }
 
 function render(){
-  const provider=escH($('fProvider')||'Provider Name');
-  const plan=escH($('fPlan')||'Plan Name');
-  const raw=$('fPrice')||'0';
-  const contract=escH($('fContract')||'No contract');
-  const ip=$('fIntroPrice'), il=$('fIntroLen');
-  const etf=escH($('fETF')||'$0');
-  const tax=escH($('fTax')||'Varies');
-  const dl=escH($('fDL')||'—');
-  const ul=escH($('fUL')||'—');
-  const lat=escH($('fLat')||'—');
-  const cap=escH($('fCap')||'Unlimited');
+  const prov=escH(V('fProv')||'Provider');
+  const plan=escH(V('fPlan')||'Plan');
+  const raw=V('fPrice')||'0';
+  const dl=escH(V('fDL')||'—');
+  const ul=escH(V('fUL')||'—');
+  const lat=escH(V('fLat')||'—');
+  const notes=V('fNotes');
 
-  // price formatting
   const p=raw.replace('$','');
   const parts=p.split('.');
   const dollars=parts[0];
   const cents=parts[1]?'.'+parts[1]:'';
 
-  // intro line
-  const introHTML=ip?`<div class="bb-row sub" style="padding:0 12px 3px;">
-    <span>Introductory rate: ${escH(ip)}</span>
-    <span class="r">${il?escH(il):''}</span>
-  </div>`:'';
+  const feesHTML=fees.length?`
+    <div class="lb-fees">
+      <div class="lb-fees-title">Fees & Charges</div>
+      ${fees.map(f=>`<div class="lb-fee-row"><span>${escH(f.n)}</span><span class="v">${escH(f.v)}</span></div>`).join('')}
+    </div>`:'';
 
-  // fees
-  const mHTML=mFees.map(f=>`<div class="bb-row"><span>${escH(f.n)}</span><span class="r">${escH(f.v)}</span></div>`).join('');
-  const oHTML=oFees.map(f=>`<div class="bb-row"><span>${escH(f.n)}</span><span class="r">${escH(f.v)}</span></div>`).join('');
-
-  const notes=$('fNotes');
+  const notesHTML=notes?`<div class="lb-notes">${escH(notes)}</div>`:'';
 
   document.getElementById('label').innerHTML=`
-    <div class="bb-header">Broadband Facts</div>
-    <div class="bb-provider">${provider}</div>
-    <div class="bb-plan">${plan}</div>
-
-    <div class="bb-thick"></div>
-
-    <div class="bb-sec" style="padding-bottom:0;">
-      <div class="bb-sec-title">Monthly Price</div>
-    </div>
-    <div class="bb-price-row">
-      <span class="bb-price-big">$${escH(dollars)}${cents?'<span style="font-size:16px;">'+escH(cents)+'</span>':''}</span>
-      <span class="bb-price-mo">/mo</span>
-    </div>
-    <div class="bb-contract">${contract} required</div>
-    ${introHTML}
-
-    <div class="bb-thick"></div>
-
-    <div class="bb-sec" style="padding-bottom:4px;">
-      <div class="bb-sec-title" style="margin-bottom:3px;">Additional Charges & Fees</div>
-      ${mHTML}
+    <div class="lb-head">
+      <div class="lb-head-title">${prov}</div>
+      <div class="lb-head-plan">${plan}</div>
     </div>
 
-    <div class="bb-med"></div>
-
-    <div class="bb-sec" style="padding-bottom:4px;">
-      <div class="bb-sec-title" style="margin-bottom:3px;">One-Time Fees</div>
-      ${oHTML}
+    <div class="lb-price-block">
+      <div class="lb-price-label">Monthly Price</div>
+      <div class="lb-price">$${escH(dollars)}${cents?'<span class="cents">'+escH(cents)+'</span>':''}<span class="mo">/mo</span></div>
     </div>
 
-    <div class="bb-med"></div>
-
-    <div class="bb-sec" style="padding-bottom:4px;">
-      <div class="bb-row"><span>Early Termination Fee</span><span class="r">${etf}</span></div>
-      <div class="bb-row"><span>Government Taxes</span><span class="r">${tax}</span></div>
-    </div>
-
-    <div class="bb-thick"></div>
-
-    <div class="bb-sec" style="padding-bottom:0;">
-      <div class="bb-sec-title">Performance</div>
-    </div>
-
-    <div class="bb-speeds">
-      <div class="bb-speed-cell">
-        <div class="bb-speed-lbl">Typical Download Speed</div>
-        <div class="bb-speed-val">${dl}</div>
+    <div class="lb-speeds">
+      <div class="lb-speed-cell">
+        <div class="lb-speed-lbl">Download</div>
+        <div class="lb-speed-val">${dl}</div>
       </div>
-      <div class="bb-speed-cell">
-        <div class="bb-speed-lbl">Typical Upload Speed</div>
-        <div class="bb-speed-val">${ul}</div>
+      <div class="lb-speed-cell">
+        <div class="lb-speed-lbl">Upload</div>
+        <div class="lb-speed-val">${ul}</div>
       </div>
-      <div class="bb-speed-cell">
-        <div class="bb-speed-lbl">Typical Latency</div>
-        <div class="bb-speed-val">${lat}</div>
-      </div>
-      <div class="bb-speed-cell">
-        <div class="bb-speed-lbl">Data Included</div>
-        <div class="bb-speed-val">${cap}</div>
+      <div class="lb-speed-cell">
+        <div class="lb-speed-lbl">Latency</div>
+        <div class="lb-speed-val">${lat}</div>
       </div>
     </div>
 
-    <div class="bb-thick"></div>
+    ${feesHTML}
+    ${notesHTML}
 
-    <div class="bb-data">
-      Learn about the terms on this label at <strong>fcc.gov/broadbandlabels</strong>
-    </div>
-    ${notes?'<div class="bb-thin"></div><div class="bb-notes">'+escH(notes)+'</div>':''}
+    <div class="lb-foot">Broadband Facts &middot; fcc.gov/broadbandlabels</div>
   `;
 }
 
-function dl(transparent){
+function dlPNG(transparent){
   html2canvas(document.getElementById('label'),{
     scale:4, backgroundColor:transparent?null:'#ffffff', useCORS:true
   }).then(c=>{
     const a=document.createElement('a');
-    const prov=document.getElementById('fProvider').value.trim()||'broadband';
-    const pln=document.getElementById('fPlan').value.trim()||'label';
+    const prov=V('fProv')||'broadband';
+    const pln=V('fPlan')||'label';
     const suf=transparent?'_transparent':'';
-    a.download=prov.replace(/\s+/g,'_')+'_'+pln.replace(/\s+/g,'_')+'_broadband_facts'+suf+'.png';
+    a.download=prov.replace(/\s+/g,'_')+'_'+pln.replace(/\s+/g,'_')+'_facts'+suf+'.png';
     a.href=c.toDataURL('image/png');
     a.click();
   });
 }
 
 function resetAll(){
-  document.querySelectorAll('.form-panel input').forEach(el=>{
-    if(el.id==='fETF')el.value='$0';
-    else if(el.id==='fTax')el.value='Included';
-    else if(el.id==='fCap')el.value='Unlimited';
-    else el.value='';
-  });
+  document.querySelectorAll('.fp input').forEach(el=>el.value='');
   document.getElementById('fNotes').value='';
-  mFees=[{n:'Hidden Monthly Fees',v:'$0'},{n:'Local Access Fees',v:'$0'}];
-  oFees=[{n:'Installation Fee',v:'$0'},{n:'Equipment Fee',v:'$0'}];
-  renderInputs(); render();
+  fees=[{n:'Installation',v:'$0'},{n:'Equipment Fee',v:'$0'},{n:'Hidden Monthly Fees',v:'$0'}];
+  renderF(); render();
 }
 
-renderInputs(); render();
+renderF(); render();
 </script>
 </body>
 </html>
