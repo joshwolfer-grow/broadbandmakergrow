@@ -176,6 +176,21 @@
   .bb-data { padding: 5px 12px; font-size: 11px; }
   .bb-data strong { font-weight: 700; }
 
+  /* Notes */
+  .bb-notes {
+    padding: 5px 12px 6px;
+    font-size: 10px; font-style: italic; color: #333;
+    line-height: 1.35;
+  }
+
+  .field textarea {
+    width: 100%; padding: 5px 7px; border: 1px solid #ddd; border-radius: 4px;
+    font-size: 12px; font-family: inherit; outline: none; resize: vertical;
+    min-height: 42px;
+  }
+  .field textarea:focus { border-color: #333; }
+  .field textarea::placeholder { color: #c0c0c0; }
+
   @media (max-width: 780px) {
     .app { grid-template-columns: 1fr; }
     .preview-panel { padding: 20px; }
@@ -226,6 +241,12 @@
   <div class="row">
     <div class="field"><label>Typical Latency</label><input id="fLat" placeholder="≤ 5 ms" oninput="render()"></div>
     <div class="field"><label>Data Cap</label><input id="fCap" value="Unlimited" oninput="render()"></div>
+  </div>
+
+  <div class="sec">Notes (optional)</div>
+  <div class="field">
+    <label>Shows at bottom of label in italics</label>
+    <textarea id="fNotes" placeholder="e.g. This is lifetime pricing, not an intro rate" oninput="render()"></textarea>
   </div>
 
   <div class="actions">
@@ -301,6 +322,8 @@ function render(){
   const mHTML=mFees.map(f=>`<div class="bb-row"><span>${escH(f.n)}</span><span class="r">${escH(f.v)}</span></div>`).join('');
   const oHTML=oFees.map(f=>`<div class="bb-row"><span>${escH(f.n)}</span><span class="r">${escH(f.v)}</span></div>`).join('');
 
+  const notes=$('fNotes');
+
   document.getElementById('label').innerHTML=`
     <div class="bb-header">Broadband Facts</div>
     <div class="bb-provider">${provider}</div>
@@ -369,6 +392,7 @@ function render(){
     <div class="bb-data">
       Learn about the terms on this label at <strong>fcc.gov/broadbandlabels</strong>
     </div>
+    ${notes?'<div class="bb-thin"></div><div class="bb-notes">'+escH(notes)+'</div>':''}
   `;
 }
 
@@ -393,6 +417,7 @@ function resetAll(){
     else if(el.id==='fCap')el.value='Unlimited';
     else el.value='';
   });
+  document.getElementById('fNotes').value='';
   mFees=[{n:'Hidden Monthly Fees',v:'$0'},{n:'Local Access Fees',v:'$0'}];
   oFees=[{n:'Installation Fee',v:'$0'},{n:'Equipment Fee',v:'$0'}];
   renderInputs(); render();
