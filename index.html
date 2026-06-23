@@ -6,358 +6,399 @@
 <title>Broadband Facts Label Generator</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:#f0f0f0;color:#1a1a1a;min-height:100vh;}
-  .app{display:flex;min-height:100vh;}
-
-  .form-panel{
-    width:460px;min-width:460px;background:#fff;
-    border-right:1px solid #ddd;overflow-y:auto;padding:24px 20px;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #e8e8e8;
+    min-height: 100vh;
   }
-  .form-panel h1{font-size:18px;font-weight:700;margin-bottom:2px;}
-  .form-panel .subtitle{font-size:12px;color:#666;margin-bottom:20px;}
-  .st{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin:20px 0 8px;padding-top:14px;border-top:1px solid #eee;}
-  .st:first-of-type{border-top:none;margin-top:0;padding-top:0;}
-  .field{margin-bottom:10px;}
-  .field label{display:block;font-size:11px;font-weight:600;margin-bottom:2px;color:#333;}
-  .field input,.field select,.field textarea{
-    width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:3px;font-size:12px;font-family:inherit;
-  }
-  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#0066cc;box-shadow:0 0 0 2px rgba(0,102,204,0.15);}
-  .row{display:flex;gap:8px;}
-  .row .field{flex:1;}
-  .fee-row{display:flex;gap:6px;align-items:end;margin-bottom:5px;}
-  .fee-row .field{flex:1;margin-bottom:0;}
-  .fee-row button{padding:6px 8px;background:#e74c3c;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;flex-shrink:0;height:28px;}
-  .add-btn{padding:4px 10px;background:#f5f5f5;border:1px dashed #bbb;border-radius:3px;cursor:pointer;font-size:11px;color:#555;margin-top:3px;}
-  .add-btn:hover{background:#eee;}
-  .actions{margin-top:24px;display:flex;gap:8px;}
-  .btn-primary{padding:9px 20px;background:#0066cc;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;}
-  .btn-primary:hover{background:#0055aa;}
-  .btn-secondary{padding:9px 20px;background:#fff;color:#333;border:1px solid #ccc;border-radius:5px;font-size:13px;cursor:pointer;}
-
-  .preview-panel{
-    flex:1;display:flex;align-items:flex-start;justify-content:center;
-    padding:32px 20px;overflow-y:auto;background:#e8e8e8;
+  .app {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    min-height: 100vh;
   }
 
-  /* ══ LABEL — Ezee-style clean text format ══ */
-  #label{
-    width:380px;background:#fff;border:2px solid #000;
-    font-family:'Times New Roman',Times,Georgia,serif;color:#000;line-height:1.35;
-    padding:0;
+  /* ── FORM ── */
+  .form-panel {
+    background: #fff;
+    border-right: 1px solid #d0d0d0;
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+  .form-panel h1 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+  .form-panel .sub { font-size: 11px; color: #999; margin-bottom: 14px; }
+
+  .sec {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #aaa;
+    margin: 14px 0 5px; padding-top: 10px; border-top: 1px solid #eee;
+  }
+  .sec:first-of-type { border: none; padding-top: 0; }
+
+  .row { display: flex; gap: 8px; margin-bottom: 5px; }
+  .row > * { flex: 1; }
+  .field { margin-bottom: 5px; }
+  .field label {
+    display: block; font-size: 10px; font-weight: 600; color: #777; margin-bottom: 1px;
+  }
+  .field input, .field select {
+    width: 100%; padding: 5px 7px; border: 1px solid #ddd; border-radius: 4px;
+    font-size: 13px; font-family: inherit; outline: none;
+  }
+  .field input:focus { border-color: #333; }
+  .field input::placeholder { color: #c0c0c0; }
+
+  .charge-row {
+    display: flex; align-items: center; gap: 4px; margin-bottom: 3px;
+  }
+  .charge-row input:first-child { flex: 2; }
+  .charge-row input:nth-child(2) { flex: 1; }
+  .charge-row .x {
+    background: none; border: none; color: #ccc; cursor: pointer;
+    font-size: 15px; padding: 0 3px; line-height: 1;
+  }
+  .charge-row .x:hover { color: #e44; }
+
+  .add-btn {
+    background: none; border: 1px dashed #ccc; border-radius: 4px;
+    padding: 3px 8px; font-size: 10px; color: #999; cursor: pointer; width: 100%;
+  }
+  .add-btn:hover { border-color: #888; color: #555; }
+
+  .actions {
+    display: flex; gap: 6px; margin-top: 16px; padding-top: 10px; border-top: 1px solid #eee;
+  }
+  .btn {
+    flex: 1; padding: 9px; border: none; border-radius: 5px;
+    font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .btn-dark { background: #111; color: #fff; }
+  .btn-dark:hover { background: #333; }
+  .btn-light { background: #eee; color: #555; }
+  .btn-light:hover { background: #ddd; }
+
+  /* ── PREVIEW ── */
+  .preview-panel {
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px; overflow: auto;
   }
 
-  .lb-title{
-    padding:10px 12px 2px;font-size:20px;font-weight:900;
-    font-family:Arial,Helvetica,sans-serif;
-  }
-  .lb-prov{padding:0 12px 8px;font-size:11px;line-height:1.3;border-bottom:1px solid #000;}
-  .lb-prov .pn{font-weight:400;}
-
-  /* Monthly price row */
-  .lb-price{
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding:6px 12px;font-size:13px;font-weight:700;
-    border-bottom:1px solid #000;
-  }
-  .lb-price .pv{font-weight:700;}
-
-  /* Explanatory text */
-  .lb-note{padding:5px 12px 6px;font-size:10px;line-height:1.3;border-bottom:1px solid #000;}
-
-  /* Section header */
-  .lb-sh{padding:5px 12px;font-size:12px;font-weight:700;border-bottom:1px solid #000;}
-
-  /* Dash line item: "- Label     $0" */
-  .lb-dl{
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding:1px 12px;font-size:11px;
-  }
-  .lb-dl .dll{font-weight:400;}
-  .lb-dl .dlv{font-weight:400;text-align:right;white-space:nowrap;}
-
-  /* Block with bottom border */
-  .lb-blk{border-bottom:1px solid #000;padding-bottom:4px;}
-
-  /* Plain text block */
-  .lb-txt{padding:4px 12px;font-size:10.5px;line-height:1.3;}
-
-  /* Speed line */
-  .lb-sl{
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding:1px 12px;font-size:11px;
-  }
-  .lb-sl .sll{font-weight:400;}
-  .lb-sl .slv{font-weight:400;text-align:right;white-space:nowrap;}
-
-  /* Data row */
-  .lb-data-head{
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding:5px 12px 1px;font-size:12px;font-weight:700;
+  /* ════════════════════════════════════════
+     THE LABEL — matches official FCC format
+     ════════════════════════════════════════ */
+  #label {
+    width: 300px;
+    background: #fff;
+    border: 2.5px solid #000;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #000;
+    line-height: 1.3;
   }
 
-  /* Two-col label row */
-  .lb-2c{
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding:2px 12px;font-size:11px;
+  /* Black header */
+  .bb-header {
+    background: #000; color: #fff;
+    padding: 7px 12px 6px;
+    font-size: 18px; font-weight: 700;
+    letter-spacing: -0.01em;
   }
-  .lb-2c .c1{font-weight:700;}
-  .lb-2c .c2{font-weight:400;text-align:right;}
 
-  /* Customer support block */
-  .lb-cs{padding:4px 12px 6px;font-size:10.5px;line-height:1.35;}
+  /* Provider + plan */
+  .bb-provider {
+    padding: 5px 12px 1px;
+    font-size: 12px; font-weight: 700;
+  }
+  .bb-plan {
+    padding: 0 12px 5px;
+    font-size: 11px; color: #333;
+  }
 
-  /* Footer */
-  .lb-foot{padding:6px 12px 8px;font-size:9.5px;line-height:1.35;border-top:1px solid #000;}
+  /* Thick divider */
+  .bb-thick { border-top: 3px solid #000; }
+  /* Medium divider */
+  .bb-med { border-top: 2px solid #000; }
+  /* Thin divider */
+  .bb-thin { border-top: 1px solid #000; }
 
-  @media(max-width:1000px){
-    .app{flex-direction:column;}
-    .form-panel{width:100%;min-width:auto;border-right:none;border-bottom:1px solid #ddd;}
-    .preview-panel{padding:20px 10px;}
-    #label{width:100%;max-width:380px;}
+  /* Section block */
+  .bb-sec { padding: 5px 12px; }
+
+  /* Section title */
+  .bb-sec-title {
+    font-size: 12.5px; font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  /* Price big */
+  .bb-price-row {
+    padding: 3px 12px 1px;
+  }
+  .bb-price-big {
+    font-size: 28px; font-weight: 700; line-height: 1.1;
+  }
+  .bb-price-mo {
+    font-size: 13px; font-weight: 400; color: #333;
+  }
+
+  /* Contract line */
+  .bb-contract {
+    padding: 0 12px 5px;
+    font-size: 10px; color: #555;
+  }
+
+  /* Standard left/right row */
+  .bb-row {
+    display: flex; justify-content: space-between;
+    align-items: baseline;
+    padding: 1.5px 0;
+    font-size: 11px;
+  }
+  .bb-row .r { font-weight: 700; text-align: right; white-space: nowrap; }
+  .bb-row.indent { padding-left: 10px; }
+  .bb-row.sub { font-size: 10px; color: #444; }
+
+  /* Speed 2x2 grid */
+  .bb-speeds {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .bb-speed-cell {
+    padding: 4px 12px;
+    font-size: 10.5px;
+  }
+  .bb-speed-cell:nth-child(odd) { border-right: 1px solid #000; }
+  .bb-speed-cell:nth-child(n+3) { border-top: 1px solid #000; }
+  .bb-speed-lbl { font-size: 9px; color: #555; }
+  .bb-speed-val { font-size: 13px; font-weight: 700; }
+
+  /* Data cap row */
+  .bb-data { padding: 5px 12px; font-size: 11px; }
+  .bb-data strong { font-weight: 700; }
+
+  @media (max-width: 780px) {
+    .app { grid-template-columns: 1fr; }
+    .preview-panel { padding: 20px; }
   }
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="form-panel">
-    <h1>Broadband Facts Generator</h1>
-    <p class="subtitle">Fill in plan details — preview updates live — download as PNG</p>
+<div class="form-panel">
+  <h1>Broadband Facts Generator</h1>
+  <div class="sub">Fill in → Download PNG → Drop in Canva slick</div>
 
-    <div class="st">Provider & Plan</div>
-    <div class="field"><label>Provider Name</label>
-      <input id="providerName" placeholder="e.g. Ezee Fiber" oninput="render()"></div>
-    <div class="field"><label>Plan Name</label>
-      <input id="planName" placeholder="e.g. 5 Gig + Wi-Fi eero Max 7" oninput="render()"></div>
-    <div class="field"><label>Service Type</label>
-      <select id="serviceType" onchange="render()">
-        <option value="Fixed">Fixed</option><option value="Mobile">Mobile</option>
-      </select></div>
-    <div class="field"><label>Unique Plan ID (optional)</label>
-      <input id="fccId" placeholder="e.g. F0032830051008GTX000241004" oninput="render()"></div>
-
-    <div class="st">Monthly Price</div>
-    <div class="field"><label>Monthly Price ($)</label>
-      <input id="monthlyPrice" type="number" placeholder="99.00" oninput="render()"></div>
-    <div class="field"><label>Price Note</label>
-      <select id="priceNote" onchange="render()">
-        <option value="not_intro_no_contract">Not an introductory rate & does not require a contract</option>
-        <option value="intro">Is an introductory rate</option>
-        <option value="contract">Requires a contract</option>
-        <option value="custom">Custom note</option>
-      </select></div>
-    <div class="field"><label>Custom Price Note (if custom)</label>
-      <input id="customPriceNote" placeholder="" oninput="render()"></div>
-
-    <div class="st">Additional Charges & Terms</div>
-    <div id="chargeRows"></div>
-    <button class="add-btn" onclick="addCharge()">+ Add Charge Line</button>
-
-    <div class="st">Discounts & Bundles</div>
-    <div class="field"><label>Discounts Text</label>
-      <input id="discountText" placeholder="e.g. No confusing discounts or bundles to worry about." oninput="render()"></div>
-
-    <div class="st">Speeds & Latency</div>
-    <div class="row">
-      <div class="field"><label>Download Speed</label>
-        <input id="downSpeed" placeholder="5330" oninput="render()"></div>
-      <div class="field"><label>Unit</label>
-        <select id="downUnit" onchange="render()"><option value="Mbps">Mbps</option><option value="Gbps">Gbps</option></select></div>
-    </div>
-    <div class="row">
-      <div class="field"><label>Upload Speed</label>
-        <input id="upSpeed" placeholder="5410" oninput="render()"></div>
-      <div class="field"><label>Unit</label>
-        <select id="upUnit" onchange="render()"><option value="Mbps">Mbps</option><option value="Gbps">Gbps</option></select></div>
-    </div>
-    <div class="field"><label>Typical Latency</label>
-      <input id="latency" placeholder="3 milliseconds" oninput="render()"></div>
-
-    <div class="st">Data</div>
-    <div class="field"><label>Data Included</label>
-      <input id="dataAmount" value="Unlimited" placeholder="Unlimited" oninput="render()"></div>
-    <div class="field"><label>Charges for Additional Data Usage</label>
-      <input id="overage" value="$0" placeholder="$0" oninput="render()"></div>
-
-    <div class="st">Policies</div>
-    <div class="row">
-      <div class="field"><label>Network Management</label>
-        <input id="netMgmt" value="Read our Policy" placeholder="Read our Policy" oninput="render()"></div>
-      <div class="field"><label>Privacy</label>
-        <input id="privacy" value="Read our Policy" placeholder="Read our Policy" oninput="render()"></div>
-    </div>
-
-    <div class="st">Customer Support</div>
-    <div class="field"><label>Contact URL</label>
-      <input id="supportUrl" placeholder="ezeefiber.com/contact" oninput="render()"></div>
-    <div class="field"><label>Phone</label>
-      <input id="supportPhone" placeholder="713-255-7500" oninput="render()"></div>
-
-    <div class="actions">
-      <button class="btn-primary" onclick="downloadLabel()">Download PNG</button>
-      <button class="btn-secondary" onclick="resetForm()">Clear All</button>
-    </div>
+  <div class="sec">Provider & Plan</div>
+  <div class="row">
+    <div class="field"><label>Provider</label><input id="fProvider" placeholder="Ezee Fiber" oninput="render()"></div>
+    <div class="field"><label>Plan Name</label><input id="fPlan" placeholder="1 GIG" oninput="render()"></div>
   </div>
 
-  <div class="preview-panel">
-    <div id="label"></div>
+  <div class="sec">Monthly Price</div>
+  <div class="row">
+    <div class="field"><label>Price ($/mo)</label><input id="fPrice" placeholder="79.99" oninput="render()"></div>
+    <div class="field"><label>Contract</label><input id="fContract" placeholder="No contract" oninput="render()"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Intro Price (optional)</label><input id="fIntroPrice" placeholder="" oninput="render()"></div>
+    <div class="field"><label>Intro Length</label><input id="fIntroLen" placeholder="" oninput="render()"></div>
+  </div>
+
+  <div class="sec">Additional Monthly Charges</div>
+  <div id="mCharges"></div>
+  <button class="add-btn" onclick="addC('m')">+ Add Charge</button>
+
+  <div class="sec">One-Time Fees</div>
+  <div id="oCharges"></div>
+  <button class="add-btn" onclick="addC('o')">+ Add Fee</button>
+
+  <div class="sec">Early Termination & Taxes</div>
+  <div class="row">
+    <div class="field"><label>Early Termination Fee</label><input id="fETF" value="$0" oninput="render()"></div>
+    <div class="field"><label>Gov't Taxes</label><input id="fTax" value="Included" oninput="render()"></div>
+  </div>
+
+  <div class="sec">Performance</div>
+  <div class="row">
+    <div class="field"><label>Download Speed</label><input id="fDL" placeholder="1000 Mbps" oninput="render()"></div>
+    <div class="field"><label>Upload Speed</label><input id="fUL" placeholder="1000 Mbps" oninput="render()"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Typical Latency</label><input id="fLat" placeholder="≤ 5 ms" oninput="render()"></div>
+    <div class="field"><label>Data Cap</label><input id="fCap" value="Unlimited" oninput="render()"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-dark" onclick="dl(false)">Download PNG</button>
+    <button class="btn btn-light" onclick="dl(true)">Transparent</button>
+    <button class="btn btn-light" onclick="resetAll()">Reset</button>
   </div>
 </div>
 
+<div class="preview-panel">
+  <div id="label"></div>
+</div>
+</div>
+
 <script>
-// Default charge lines matching Ezee format
-let charges=[
-  {name:'Hidden Monthly Fees',value:'$0'},
-  {name:'One Time Fees',value:'$0'},
-  {name:'Local Access Fees',value:'$0'},
-  {name:'Government Taxes',value:'Included'},
-  {name:'Installation Fee',value:'$0'},
-  {name:'Late Payment Fee',value:'$0'},
-  {name:'Early Termination Fee',value:'$0'}
-];
+const $=id=>document.getElementById(id).value.trim();
+const esc=s=>s.replace(/"/g,'&quot;');
+const escH=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML;};
 
-function addCharge(n,v){charges.push({name:n||'',value:v||'$0'});rfi();render();}
-function removeCharge(i){charges.splice(i,1);rfi();render();}
+let mFees=[{n:'Hidden Monthly Fees',v:'$0'},{n:'Local Access Fees',v:'$0'}];
+let oFees=[{n:'Installation Fee',v:'$0'},{n:'Equipment Fee',v:'$0'}];
 
-function rfi(){
-  document.getElementById('chargeRows').innerHTML=charges.map((c,i)=>`
-    <div class="fee-row">
-      <div class="field"><label>Name</label>
-        <input value="${esc(c.name)}" oninput="charges[${i}].name=this.value;render()" placeholder="e.g. Installation Fee"></div>
-      <div class="field"><label>Value</label>
-        <input value="${esc(c.value)}" oninput="charges[${i}].value=this.value;render()" placeholder="$0"></div>
-      <button onclick="removeCharge(${i})">×</button>
-    </div>`).join('');
+function addC(t){
+  (t==='m'?mFees:oFees).push({n:'',v:'$0'});
+  renderInputs(); render();
+}
+function rmC(t,i){
+  (t==='m'?mFees:oFees).splice(i,1);
+  renderInputs(); render();
+}
+function upC(t,i,f,v){
+  const a=t==='m'?mFees:oFees; a[i][f]=v; render();
 }
 
-function esc(s){return String(s).replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-function escH(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-function $(id){return document.getElementById(id).value;}
+function renderInputs(){
+  ['m','o'].forEach(t=>{
+    const a=t==='m'?mFees:oFees;
+    const el=document.getElementById(t==='m'?'mCharges':'oCharges');
+    el.innerHTML=a.map((c,i)=>`<div class="charge-row">
+      <input value="${esc(c.n)}" placeholder="Fee name" oninput="upC('${t}',${i},'n',this.value)">
+      <input value="${esc(c.v)}" placeholder="$0" oninput="upC('${t}',${i},'v',this.value)">
+      <button class="x" onclick="rmC('${t}',${i})">&times;</button>
+    </div>`).join('');
+  });
+}
 
 function render(){
-  const prov=$('providerName')||'[Provider Name]';
-  const plan=$('planName')||'[Plan Name]';
-  const type=$('serviceType');
-  const upi=$('fccId');
-  const price=$('monthlyPrice');
-  const pNote=$('priceNote');
-  const customNote=$('customPriceNote');
-  const down=$('downSpeed')||'000';
-  const downU=$('downUnit');
-  const up=$('upSpeed')||'000';
-  const upU=$('upUnit');
-  const lat=$('latency')||'0 milliseconds';
-  const dataAmt=$('dataAmount')||'Unlimited';
-  const ovr=$('overage')||'$0';
-  const disc=$('discountText')||'None';
-  const netM=$('netMgmt')||'Read our Policy';
-  const priv=$('privacy')||'Read our Policy';
-  const sUrl=$('supportUrl');
-  const sPh=$('supportPhone');
+  const provider=escH($('fProvider')||'Provider Name');
+  const plan=escH($('fPlan')||'Plan Name');
+  const raw=$('fPrice')||'0';
+  const contract=escH($('fContract')||'No contract');
+  const ip=$('fIntroPrice'), il=$('fIntroLen');
+  const etf=escH($('fETF')||'$0');
+  const tax=escH($('fTax')||'Varies');
+  const dl=escH($('fDL')||'—');
+  const ul=escH($('fUL')||'—');
+  const lat=escH($('fLat')||'—');
+  const cap=escH($('fCap')||'Unlimited');
 
-  let noteText='';
-  if(pNote==='not_intro_no_contract') noteText='This Monthly Price is not an introductory rate &amp; does not require a contract.';
-  else if(pNote==='intro') noteText='This Monthly Price is an introductory rate.';
-  else if(pNote==='contract') noteText='This Monthly Price requires a contract.';
-  else noteText=escH(customNote);
+  // price formatting
+  const p=raw.replace('$','');
+  const parts=p.split('.');
+  const dollars=parts[0];
+  const cents=parts[1]?'.'+parts[1]:'';
 
-  // Build charge lines
-  let chargeHTML='';
-  charges.forEach(c=>{
-    if(c.name) chargeHTML+=`<div class="lb-dl"><span class="dll">- ${escH(c.name)}</span><span class="dlv">${escH(c.value)}</span></div>`;
-  });
+  // intro line
+  const introHTML=ip?`<div class="bb-row sub" style="padding:0 12px 3px;">
+    <span>Introductory rate: ${escH(ip)}</span>
+    <span class="r">${il?escH(il):''}</span>
+  </div>`:'';
 
-  const priceDisplay=price?'$'+parseFloat(price).toFixed(2):'$0.00';
+  // fees
+  const mHTML=mFees.map(f=>`<div class="bb-row"><span>${escH(f.n)}</span><span class="r">${escH(f.v)}</span></div>`).join('');
+  const oHTML=oFees.map(f=>`<div class="bb-row"><span>${escH(f.n)}</span><span class="r">${escH(f.v)}</span></div>`).join('');
 
   document.getElementById('label').innerHTML=`
-    <div class="lb-title">Broadband Facts</div>
-    <div class="lb-prov">
-      <span class="pn">${escH(prov)}</span><br>
-      ${escH(plan)}<br>
-      ${escH(type)} Broadband Consumer Disclosure
+    <div class="bb-header">Broadband Facts</div>
+    <div class="bb-provider">${provider}</div>
+    <div class="bb-plan">${plan}</div>
+
+    <div class="bb-thick"></div>
+
+    <div class="bb-sec" style="padding-bottom:0;">
+      <div class="bb-sec-title">Monthly Price</div>
+    </div>
+    <div class="bb-price-row">
+      <span class="bb-price-big">$${escH(dollars)}${cents?'<span style="font-size:16px;">'+escH(cents)+'</span>':''}</span>
+      <span class="bb-price-mo">/mo</span>
+    </div>
+    <div class="bb-contract">${contract} required</div>
+    ${introHTML}
+
+    <div class="bb-thick"></div>
+
+    <div class="bb-sec" style="padding-bottom:4px;">
+      <div class="bb-sec-title" style="margin-bottom:3px;">Additional Charges & Fees</div>
+      ${mHTML}
     </div>
 
-    <div class="lb-price">
-      <span>Monthly Price:</span>
-      <span class="pv">${priceDisplay}</span>
+    <div class="bb-med"></div>
+
+    <div class="bb-sec" style="padding-bottom:4px;">
+      <div class="bb-sec-title" style="margin-bottom:3px;">One-Time Fees</div>
+      ${oHTML}
     </div>
 
-    <div class="lb-note">${noteText}</div>
+    <div class="bb-med"></div>
 
-    <div class="lb-blk">
-      <div class="lb-sh">Additional Charges &amp; Terms</div>
-      ${chargeHTML}
+    <div class="bb-sec" style="padding-bottom:4px;">
+      <div class="bb-row"><span>Early Termination Fee</span><span class="r">${etf}</span></div>
+      <div class="bb-row"><span>Government Taxes</span><span class="r">${tax}</span></div>
     </div>
 
-    <div class="lb-blk">
-      <div class="lb-sh">Discounts and Bundles</div>
-      <div class="lb-txt">${escH(disc)}</div>
+    <div class="bb-thick"></div>
+
+    <div class="bb-sec" style="padding-bottom:0;">
+      <div class="bb-sec-title">Performance</div>
     </div>
 
-    <div class="lb-blk">
-      <div class="lb-sh">Speeds Provided With Plan</div>
-      <div class="lb-sl"><span class="sll">Typical Download Speed</span><span class="slv">${escH(down)} ${escH(downU)}</span></div>
-      <div class="lb-sl"><span class="sll">Typical Upload Speed</span><span class="slv">${escH(up)}${escH(upU)}</span></div>
-      <div class="lb-sl"><span class="sll">Typical Latency</span><span class="slv">${escH(lat)}</span></div>
-    </div>
-
-    <div class="lb-blk">
-      <div class="lb-data-head">
-        <span>Data Included with<br>Monthly Price</span>
-        <span>${escH(dataAmt)}</span>
+    <div class="bb-speeds">
+      <div class="bb-speed-cell">
+        <div class="bb-speed-lbl">Typical Download Speed</div>
+        <div class="bb-speed-val">${dl}</div>
       </div>
-      <div class="lb-dl"><span class="dll">Charges for Additional Data Usage</span><span class="dlv">${escH(ovr)}</span></div>
-    </div>
-
-    <div class="lb-blk">
-      <div class="lb-2c"><span class="c1">Network<br>Management</span><span class="c2">${escH(netM)}</span></div>
-      <div class="lb-2c"><span class="c1">Privacy</span><span class="c2">${escH(priv)}</span></div>
-    </div>
-
-    <div class="lb-blk">
-      <div class="lb-sh">Customer Support</div>
-      <div class="lb-cs">
-        Contact Us:<br>
-        ${sUrl?escH(sUrl)+'<br>':''}
-        ${sPh?escH(sPh):''}
+      <div class="bb-speed-cell">
+        <div class="bb-speed-lbl">Typical Upload Speed</div>
+        <div class="bb-speed-val">${ul}</div>
+      </div>
+      <div class="bb-speed-cell">
+        <div class="bb-speed-lbl">Typical Latency</div>
+        <div class="bb-speed-val">${lat}</div>
+      </div>
+      <div class="bb-speed-cell">
+        <div class="bb-speed-lbl">Data Included</div>
+        <div class="bb-speed-val">${cap}</div>
       </div>
     </div>
 
-    <div class="lb-foot">
-      Learn more about the terms used on this label by visiting the Federal
-      Communications Comission's Consumer Resource Center.<br><br>
-      fcc.gov/consumer
-      ${upi?'<br><br>Unique Plan ID:<br>'+escH(upi):''}
+    <div class="bb-thick"></div>
+
+    <div class="bb-data">
+      Learn about the terms on this label at <strong>fcc.gov/broadbandlabels</strong>
     </div>
   `;
 }
 
-function downloadLabel(){
-  html2canvas(document.getElementById('label'),{scale:3,backgroundColor:'#fff',useCORS:true}).then(c=>{
+function dl(transparent){
+  html2canvas(document.getElementById('label'),{
+    scale:4, backgroundColor:transparent?null:'#ffffff', useCORS:true
+  }).then(c=>{
     const a=document.createElement('a');
-    const p=$('providerName')||'broadband',n=$('planName')||'label';
-    a.download=p.replace(/\s+/g,'_')+'_'+n.replace(/\s+/g,'_')+'_broadband_facts.png';
-    a.href=c.toDataURL('image/png');a.click();
+    const prov=document.getElementById('fProvider').value.trim()||'broadband';
+    const pln=document.getElementById('fPlan').value.trim()||'label';
+    const suf=transparent?'_transparent':'';
+    a.download=prov.replace(/\s+/g,'_')+'_'+pln.replace(/\s+/g,'_')+'_broadband_facts'+suf+'.png';
+    a.href=c.toDataURL('image/png');
+    a.click();
   });
 }
 
-function resetForm(){
-  document.querySelectorAll('.form-panel input, .form-panel textarea').forEach(e=>e.value='');
-  document.querySelectorAll('.form-panel select').forEach(e=>e.selectedIndex=0);
-  charges=[
-    {name:'Hidden Monthly Fees',value:'$0'},
-    {name:'One Time Fees',value:'$0'},
-    {name:'Local Access Fees',value:'$0'},
-    {name:'Government Taxes',value:'Included'},
-    {name:'Installation Fee',value:'$0'},
-    {name:'Late Payment Fee',value:'$0'},
-    {name:'Early Termination Fee',value:'$0'}
-  ];
-  rfi();render();
+function resetAll(){
+  document.querySelectorAll('.form-panel input').forEach(el=>{
+    if(el.id==='fETF')el.value='$0';
+    else if(el.id==='fTax')el.value='Included';
+    else if(el.id==='fCap')el.value='Unlimited';
+    else el.value='';
+  });
+  mFees=[{n:'Hidden Monthly Fees',v:'$0'},{n:'Local Access Fees',v:'$0'}];
+  oFees=[{n:'Installation Fee',v:'$0'},{n:'Equipment Fee',v:'$0'}];
+  renderInputs(); render();
 }
 
-rfi();render();
+renderInputs(); render();
 </script>
 </body>
 </html>
