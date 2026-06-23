@@ -51,6 +51,33 @@
   .field input::placeholder, .field textarea::placeholder { color: #c0c0c0; }
   .field textarea { resize: vertical; min-height: 40px; font-size: 12px; }
 
+  .color-row {
+    display: flex; gap: 8px; margin-bottom: 5px; align-items: flex-end;
+  }
+  .color-field {
+    flex: 1; display: flex; flex-direction: column;
+  }
+  .color-field label {
+    font-size: 10px; font-weight: 600; color: #71717a; margin-bottom: 2px;
+  }
+  .color-wrap {
+    display: flex; align-items: center; gap: 5px;
+  }
+  .color-wrap input[type="color"] {
+    width: 30px; height: 30px; border: 1px solid #e4e4e7; border-radius: 5px;
+    padding: 1px; cursor: pointer; background: none;
+  }
+  .color-wrap input[type="text"] {
+    width: 72px; flex: none; font-size: 12px; font-family: 'SF Mono', Menlo, monospace;
+    text-transform: uppercase;
+  }
+  .eyedropper-tip {
+    font-size: 9px; color: #a1a1aa; line-height: 1.35;
+    padding: 6px 8px; background: #fafafa; border-radius: 5px;
+    border: 1px solid #f0f0f0; margin-top: 4px;
+  }
+  .eyedropper-tip strong { color: #71717a; }
+
   .cr {
     display: flex; align-items: center; gap: 4px; margin-bottom: 3px;
   }
@@ -202,14 +229,6 @@
     line-height: 1.4;
   }
 
-  .lb-foot {
-    background: #f9f9fa;
-    padding: 6px 16px;
-    font-size: 8px;
-    color: #a1a1aa;
-    text-align: center;
-    border-top: 1.5px solid #e4e4e7;
-  }
 
   @media (max-width: 780px) {
     .app { grid-template-columns: 1fr; }
@@ -227,6 +246,34 @@
   <div class="row">
     <div class="field"><label>Provider</label><input id="fProv" placeholder="Ezee Fiber" oninput="render()"></div>
     <div class="field"><label>Plan Name</label><input id="fPlan" placeholder="1 GIG" oninput="render()"></div>
+  </div>
+
+  <div class="sec">Brand Colors</div>
+  <div class="color-row">
+    <div class="color-field">
+      <label>Header Background</label>
+      <div class="color-wrap">
+        <input type="color" id="cBg" value="#18181b" oninput="syncColor('cBg');render()">
+        <input type="text" id="cBgHex" value="#18181B" oninput="syncHex('cBg');render()" maxlength="7">
+      </div>
+    </div>
+    <div class="color-field">
+      <label>Header Text</label>
+      <div class="color-wrap">
+        <input type="color" id="cTxt" value="#ffffff" oninput="syncColor('cTxt');render()">
+        <input type="text" id="cTxtHex" value="#FFFFFF" oninput="syncHex('cTxt');render()" maxlength="7">
+      </div>
+    </div>
+    <div class="color-field">
+      <label>Accent / Border</label>
+      <div class="color-wrap">
+        <input type="color" id="cAcc" value="#18181b" oninput="syncColor('cAcc');render()">
+        <input type="text" id="cAccHex" value="#18181B" oninput="syncHex('cAcc');render()" maxlength="7">
+      </div>
+    </div>
+  </div>
+  <div class="eyedropper-tip">
+    <strong>Color matching tip:</strong> Open the ISP's website → right-click their logo or header → Inspect → grab the hex from the CSS. Or click any color picker above — Chrome has a built-in eyedropper (pipette icon) that can sample any color on screen.
   </div>
 
   <div class="sec">Monthly Price</div>
@@ -266,6 +313,15 @@ const V=id=>document.getElementById(id).value.trim();
 const esc=s=>s.replace(/"/g,'&quot;');
 const escH=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML;};
 
+function syncColor(id){
+  document.getElementById(id+'Hex').value=document.getElementById(id).value.toUpperCase();
+}
+function syncHex(id){
+  let v=document.getElementById(id+'Hex').value;
+  if(!v.startsWith('#'))v='#'+v;
+  if(/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById(id).value=v;
+}
+
 let fees=[
   {n:'Installation',v:'$0'},
   {n:'Equipment Fee',v:'$0'},
@@ -292,6 +348,9 @@ function render(){
   const ul=escH(V('fUL')||'—');
   const lat=escH(V('fLat')||'—');
   const notes=V('fNotes');
+  const cBg=document.getElementById('cBg').value;
+  const cTxt=document.getElementById('cTxt').value;
+  const cAcc=document.getElementById('cAcc').value;
 
   const p=raw.replace('$','');
   const parts=p.split('.');
@@ -306,23 +365,26 @@ function render(){
 
   const notesHTML=notes?`<div class="lb-notes">${escH(notes)}</div>`:'';
 
-  document.getElementById('label').innerHTML=`
-    <div class="lb-head">
+  const labelEl=document.getElementById('label');
+  labelEl.style.borderColor=cAcc;
+
+  labelEl.innerHTML=`
+    <div class="lb-head" style="background:${cBg};color:${cTxt};">
       <div class="lb-head-title">${prov}</div>
       <div class="lb-head-plan">${plan}</div>
     </div>
 
-    <div class="lb-price-block">
+    <div class="lb-price-block" style="border-bottom-color:${cAcc}30;">
       <div class="lb-price-label">Monthly Price</div>
-      <div class="lb-price">$${escH(dollars)}${cents?'<span class="cents">'+escH(cents)+'</span>':''}<span class="mo">/mo</span></div>
+      <div class="lb-price" style="color:${cBg};">$${escH(dollars)}${cents?'<span class="cents">'+escH(cents)+'</span>':''}<span class="mo" style="color:#71717a;">/mo</span></div>
     </div>
 
-    <div class="lb-speeds">
-      <div class="lb-speed-cell">
+    <div class="lb-speeds" style="border-bottom-color:${cAcc}30;">
+      <div class="lb-speed-cell" style="border-right-color:${cAcc}30;">
         <div class="lb-speed-lbl">Download</div>
         <div class="lb-speed-val">${dl}</div>
       </div>
-      <div class="lb-speed-cell">
+      <div class="lb-speed-cell" style="border-right-color:${cAcc}30;">
         <div class="lb-speed-lbl">Upload</div>
         <div class="lb-speed-val">${ul}</div>
       </div>
@@ -334,8 +396,6 @@ function render(){
 
     ${feesHTML}
     ${notesHTML}
-
-    <div class="lb-foot">Broadband Facts &middot; fcc.gov/broadbandlabels</div>
   `;
 }
 
@@ -354,8 +414,14 @@ function dlPNG(transparent){
 }
 
 function resetAll(){
-  document.querySelectorAll('.fp input').forEach(el=>el.value='');
+  document.querySelectorAll('.fp input[type="text"]').forEach(el=>el.value='');
   document.getElementById('fNotes').value='';
+  document.getElementById('cBg').value='#18181b';
+  document.getElementById('cBgHex').value='#18181B';
+  document.getElementById('cTxt').value='#ffffff';
+  document.getElementById('cTxtHex').value='#FFFFFF';
+  document.getElementById('cAcc').value='#18181b';
+  document.getElementById('cAccHex').value='#18181B';
   fees=[{n:'Installation',v:'$0'},{n:'Equipment Fee',v:'$0'},{n:'Hidden Monthly Fees',v:'$0'}];
   renderF(); render();
 }
